@@ -6,7 +6,6 @@
   <name>Average-Linkage-Clustering</name>
   <description>Implementation of the a agglomerative hierarchical average linkage clustering algorithm in Java</description>
   <build>
-    <sourceDirectory>src</sourceDirectory>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -18,4 +17,13 @@
       </plugin>
     </plugins>
   </build>
+
+  <dependencies>
+  	<dependency>
+  		<groupId>junit</groupId>
+  		<artifactId>junit</artifactId>
+  		<version>4.11</version>
+  		<scope>test</scope>
+  	</dependency>
+  </dependencies>
 </project>

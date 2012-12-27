@@ -6,8 +6,11 @@ import java.util.List;
 public class Cluster {
 
 	private String name;
-	private Double distance;
+	
 	private List<Cluster> children;
+
+	private Double distance;
+	
 	
 	public Double getDistance() {
 		return distance;
