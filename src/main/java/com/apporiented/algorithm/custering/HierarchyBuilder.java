@@ -9,7 +9,7 @@ public class HierarchyBuilder {
 
 	private List<ClusterPair> distances;
 	private List<Cluster> clusters;
-	
+
 	public List<ClusterPair> getDistances() {
 		return distances;
 	}
@@ -17,25 +17,23 @@ public class HierarchyBuilder {
 	public List<Cluster> getClusters() {
 		return clusters;
 	}
-	
+
 	public HierarchyBuilder(List<Cluster> clusters, List<ClusterPair> distances) {
 		this.clusters = clusters;
 		this.distances = distances;
 	}
 
-	public void agglomerate(LinkageStrategy linkageStrategy)
-	{
+	public void agglomerate(LinkageStrategy linkageStrategy) {
 		Collections.sort(distances);
-		if (distances.size() > 0)
-		{
+		if (distances.size() > 0) {
 			ClusterPair minDistLink = distances.remove(0);
 			clusters.remove(minDistLink.getrCluster());
 			clusters.remove(minDistLink.getlCluster());
-			
+
 			Cluster oldClusterL = minDistLink.getlCluster();
 			Cluster oldClusterR = minDistLink.getrCluster();
 			Cluster newCluster = minDistLink.agglomerate(null);
-			
+
 			for (Cluster iClust : clusters) {
 				ClusterPair link1 = findByClusters(iClust, oldClusterL);
 				ClusterPair link2 = findByClusters(iClust, oldClusterR);
@@ -51,10 +49,11 @@ public class HierarchyBuilder {
 					distanceValues.add(link2.getLinkageDistance());
 					distances.remove(link2);
 				}
-				Double newDistance = linkageStrategy.calculateDistance(distanceValues);
+				Double newDistance = linkageStrategy
+				        .calculateDistance(distanceValues);
 				newLinkage.setLinkageDistance(newDistance);
 				distances.add(newLinkage);
-				
+
 			}
 			clusters.add(newCluster);
 		}
@@ -63,8 +62,10 @@ public class HierarchyBuilder {
 	private ClusterPair findByClusters(Cluster c1, Cluster c2) {
 		ClusterPair result = null;
 		for (ClusterPair link : distances) {
-			boolean cond1 = link.getlCluster().equals(c1) && link.getrCluster().equals(c2);
-			boolean cond2 = link.getlCluster().equals(c2) && link.getrCluster().equals(c1);
+			boolean cond1 = link.getlCluster().equals(c1)
+			        && link.getrCluster().equals(c2);
+			boolean cond2 = link.getlCluster().equals(c2)
+			        && link.getrCluster().equals(c1);
 			if (cond1 || cond2) {
 				result = link;
 				break;
@@ -73,17 +74,15 @@ public class HierarchyBuilder {
 		return result;
 	}
 
-	public boolean isTreeComplete()
-	{
+	public boolean isTreeComplete() {
 		return clusters.size() == 1;
 	}
-	
-	public Cluster getRootCluster()
-	{
+
+	public Cluster getRootCluster() {
 		if (!isTreeComplete()) {
 			throw new RuntimeException("No root available");
 		}
 		return clusters.get(0);
 	}
-	
+
 }

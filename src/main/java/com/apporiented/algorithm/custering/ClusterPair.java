@@ -1,44 +1,46 @@
 package com.apporiented.algorithm.custering;
 
-
 public class ClusterPair implements Comparable<ClusterPair> {
 
 	private Cluster lCluster;
 	private Cluster rCluster;
 	private Double linkageDistance;
-	
+
 	public Cluster getlCluster() {
 		return lCluster;
 	}
+
 	public void setlCluster(Cluster lCluster) {
 		this.lCluster = lCluster;
 	}
+
 	public Cluster getrCluster() {
 		return rCluster;
 	}
+
 	public void setrCluster(Cluster rCluster) {
 		this.rCluster = rCluster;
 	}
+
 	public Double getLinkageDistance() {
 		return linkageDistance;
 	}
+
 	public void setLinkageDistance(Double distance) {
 		this.linkageDistance = distance;
 	}
-	
+
 	@Override
 	public int compareTo(ClusterPair o) {
 		int result;
-		if (o == null || o.getLinkageDistance() == null ) {
+		if (o == null || o.getLinkageDistance() == null) {
 			result = -1;
-		}
-		else if (getLinkageDistance() == null) {
+		} else if (getLinkageDistance() == null) {
 			result = 1;
-		}
-		else {
+		} else {
 			result = getLinkageDistance().compareTo(o.getLinkageDistance());
 		}
-		
+
 		return result;
 	}
 
@@ -62,7 +64,6 @@ public class ClusterPair implements Comparable<ClusterPair> {
 		cluster.addChild(rCluster);
 		return cluster;
 	}
-	
 
 	@Override
 	public String toString() {
@@ -79,6 +80,5 @@ public class ClusterPair implements Comparable<ClusterPair> {
 		sb.append(" : " + linkageDistance);
 		return sb.toString();
 	}
-	
-	
+
 }

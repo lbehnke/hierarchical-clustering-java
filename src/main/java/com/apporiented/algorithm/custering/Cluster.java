@@ -6,12 +6,11 @@ import java.util.List;
 public class Cluster {
 
 	private String name;
-	
+
 	private List<Cluster> children;
 
 	private Double distance;
-	
-	
+
 	public Double getDistance() {
 		return distance;
 	}
@@ -21,11 +20,10 @@ public class Cluster {
 	}
 
 	public List<Cluster> getChildren() {
-		if (children == null)
-		{
+		if (children == null) {
 			children = new ArrayList<Cluster>();
 		}
-	
+
 		return children;
 	}
 
@@ -33,42 +31,41 @@ public class Cluster {
 		this.children = children;
 	}
 
-	public Cluster (String name)
-	{
+	public Cluster(String name) {
 		this.name = name;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
 
 	public void addChild(Cluster cluster) {
 		getChildren().add(cluster);
-		
+
 	}
 
 	public boolean contains(Cluster cluster) {
 		return getChildren().contains(cluster);
 	}
-	
-	public String toString()
-	{
+
+	@Override
+	public String toString() {
 		return "Cluster " + name;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
-		String otherName =  obj != null ? obj.toString() : "";
+		String otherName = obj != null ? obj.toString() : "";
 		return toString().equals(otherName);
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return toString().hashCode();
 	}
-	
+
 }
