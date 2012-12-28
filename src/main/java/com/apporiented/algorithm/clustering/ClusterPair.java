@@ -1,4 +1,4 @@
-package com.apporiented.algorithm.custering;
+package com.apporiented.algorithm.clustering;
 
 public class ClusterPair implements Comparable<ClusterPair> {
 
@@ -62,6 +62,8 @@ public class ClusterPair implements Comparable<ClusterPair> {
 		cluster.setDistance(getLinkageDistance());
 		cluster.addChild(lCluster);
 		cluster.addChild(rCluster);
+		lCluster.setParent(cluster);
+		rCluster.setParent(cluster);
 		return cluster;
 	}
 

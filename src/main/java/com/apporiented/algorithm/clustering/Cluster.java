@@ -1,4 +1,4 @@
-package com.apporiented.algorithm.custering;
+package com.apporiented.algorithm.clustering;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,8 @@ import java.util.List;
 public class Cluster {
 
 	private String name;
+	
+	private Cluster parent;
 
 	private List<Cluster> children;
 
@@ -31,6 +33,15 @@ public class Cluster {
 		this.children = children;
 	}
 
+	public Cluster getParent() {
+		return parent;
+	}
+
+	public void setParent(Cluster parent) {
+		this.parent = parent;
+	}
+
+	
 	public Cluster(String name) {
 		this.name = name;
 	}
@@ -66,6 +77,10 @@ public class Cluster {
 	@Override
 	public int hashCode() {
 		return toString().hashCode();
+	}
+
+	public boolean isLeaf() {
+		return getChildren().size() == 0;
 	}
 
 }

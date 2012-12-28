@@ -1,4 +1,4 @@
-package com.apporiented.algorithm.custering;
+package com.apporiented.algorithm.clustering;
 
 import java.util.ArrayList;
 import java.util.List;

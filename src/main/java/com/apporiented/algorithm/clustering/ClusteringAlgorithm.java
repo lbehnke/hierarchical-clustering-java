@@ -1,4 +1,4 @@
-package com.apporiented.algorithm.custering;
+package com.apporiented.algorithm.clustering;
 
 public interface ClusteringAlgorithm {
 
