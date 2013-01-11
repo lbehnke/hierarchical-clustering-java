@@ -1,12 +1,15 @@
 hierarchical-clustering-java
 ============================
 
-Implementation of an agglomerative hierarchical clustering algorithm in Java. Different linkage approaches are supported.
+Implementation of an agglomerative hierarchical clustering algorithm in Java. Different linkage approaches are supported:
+* Average Linkage
+* Single Linkage
+* Complete Linkage
 
 What you put in
 ---------------
 
-Pass an distance matrix and a cluster name array to the clustering algorithm:
+Pass an distance matrix and a cluster name array along with an linkage strategy to the clustering algorithm:
 
     String[] names = new String[] { "O1", "O2", "O3", "O4", "O5", "O6" };
     double[][] distances = new double[][] { 
@@ -30,6 +33,17 @@ You may want to visualize the result using the Swing component *DendrogramPanel*
     DendrogramPanel dp = new DendrogramPanel();
     dp.setModel(cluster);
 
-Embedded into a JFrame you should see this:
+Whem embedded into a JFrame the dendrogram panel should display this:
 
-![Screenshot](https://raw.github.com/lbehnke/hierarchical-clustering-java/master/etc/screenshot1.png "Screenshot of sample clustering result")
+![Screenshot](https://raw.github.com/lbehnke/hierarchical-clustering-java/master/etc/screenshot1.png "Average linkage")
+
+Same data but different linkage strategy (MinimumLinkageStrategy) result in this diagram:
+
+![Screenshot](https://raw.github.com/lbehnke/hierarchical-clustering-java/master/etc/screenshot2.png "Minimum linkage")
+
+References
+----------
+[Average linkage clustering](http://en.wikipedia.org/wiki/UPGMA "Average linkage clustering")
+[Single linkage clustering](http://en.wikipedia.org/wiki/Single-linkage_clustering "Single linkage clustering")
+[Complete linkage clustering](http://en.wikipedia.org/wiki/Complete_linkage_clustering "Complete linkage clustering")
+

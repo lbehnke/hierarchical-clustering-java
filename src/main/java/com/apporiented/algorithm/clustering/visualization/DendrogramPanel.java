@@ -13,10 +13,10 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import com.apporiented.algorithm.clustering.AverageLinkageStrategy;
 import com.apporiented.algorithm.clustering.Cluster;
 import com.apporiented.algorithm.clustering.ClusteringAlgorithm;
 import com.apporiented.algorithm.clustering.DefaultClusteringAlgorithm;
+import com.apporiented.algorithm.clustering.SingleLinkageStrategy;
 
 public class DendrogramPanel extends JPanel {
 
@@ -219,7 +219,7 @@ public class DendrogramPanel extends JPanel {
 	    String[] names = new String[] { "O1", "O2", "O3", "O4", "O5", "O6" };
 	    ClusteringAlgorithm alg = new DefaultClusteringAlgorithm();
         Cluster cluster = alg.performClustering(distances, names,
-                new AverageLinkageStrategy());
+                new SingleLinkageStrategy());
         cluster.toConsole(0);
         return cluster;
     }
