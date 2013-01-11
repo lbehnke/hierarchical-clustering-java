@@ -27,7 +27,7 @@ Pass an distance matrix and a cluster name array along with an linkage strategy 
 What you get out
 ----------------
 
-A java object *Cluster* is returned, that represents an hierachy of clusters based on their distances.
+A *Cluster* instance is returned, that represents an hierachy of clusters based on their distances.
 You may want to visualize the result using the Swing component *DendrogramPanel*:
 
     DendrogramPanel dp = new DendrogramPanel();
