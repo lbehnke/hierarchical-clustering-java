@@ -37,7 +37,7 @@ When embedded into a JFrame the dendrogram panel should display this:
 
 ![Screenshot](https://raw.github.com/lbehnke/hierarchical-clustering-java/master/etc/screenshot1.png "Average linkage")
 
-Same data but different linkage strategy (MinimumLinkageStrategy) result in this diagram:
+Same data but different linkage strategy (MinimumLinkageStrategy) result in a slightly different diagram:
 
 ![Screenshot](https://raw.github.com/lbehnke/hierarchical-clustering-java/master/etc/screenshot2.png "Minimum linkage")
 
