@@ -82,5 +82,29 @@ public class Cluster {
 	public boolean isLeaf() {
 		return getChildren().size() == 0;
 	}
+	
+	public int countLeafs() {
+	    return countLeafs(this, 0);
+	}
 
+    public int countLeafs(Cluster node, int count) {
+        if (node.isLeaf()) count++;
+        for (Cluster child : node.getChildren()) {
+            count += child.countLeafs();
+        }
+        return count;
+    }
+    
+    public void toConsole(int indent) {
+        for (int i = 0; i < indent; i++) {
+            System.out.print("  ");
+            
+        }
+        String name = getName() + (isLeaf() ? " (leaf)" : "");
+        System.out.println(name);
+        for (Cluster child : getChildren()) {
+            child.toConsole(indent + 1);
+        }
+    }
+	   
 }
