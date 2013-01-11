@@ -100,11 +100,20 @@ public class Cluster {
             System.out.print("  ");
             
         }
-        String name = getName() + (isLeaf() ? " (leaf)" : "");
+        String name = getName() + (isLeaf() ? " (leaf)" : "") + (distance != null ? "  distance: " + distance : "");
         System.out.println(name);
         for (Cluster child : getChildren()) {
             child.toConsole(indent + 1);
         }
+    }
+
+    public double getTotalDistance() {
+        double dist = getDistance() == null ? 0 : getDistance();
+        if (getChildren().size() > 0) {
+            dist += children.get(0).getTotalDistance();
+        }
+        return dist;
+
     }
 	   
 }

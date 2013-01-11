@@ -1,5 +1,6 @@
 package com.apporiented.algorithm.clustering.visualization;
 
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -86,9 +87,9 @@ public class ClusterComponent implements Paintable {
 	}
 
     @Override
-    public void paint(Graphics2D g, int xDisplayOffset, int yDisplayOffset, double xDisplayFactor, double yDisplayFactor) {
+    public void paint(Graphics2D g, int xDisplayOffset, int yDisplayOffset, double xDisplayFactor, double yDisplayFactor, boolean decorated) {
         int x1, y1, x2, y2;
-        
+        FontMetrics fontMetrics =  g.getFontMetrics();
         x1 = (int)(initPoint.getX() * xDisplayFactor + xDisplayOffset);
         y1 = (int)(initPoint.getY() * yDisplayFactor + yDisplayOffset);
         x2 = (int)(linkPoint.getX() * xDisplayFactor + xDisplayOffset);
@@ -97,18 +98,22 @@ public class ClusterComponent implements Paintable {
         g.drawLine(x1, y1, x2, y2);
 
         if (cluster.isLeaf()) {
-            int hFont =  g.getFontMetrics().getHeight();
-            g.drawString(cluster.getName(), x1 + namePadding, y1 + (hFont/2) - 2);
+            g.drawString(cluster.getName(), x1 + namePadding, y1 + (fontMetrics.getHeight()/2) - 2);
         }
- 
+        if (decorated && cluster.getDistance() != null && !cluster.getDistance().isNaN() && cluster.getDistance() > 0) {
+            String s = String.format("%.2f", cluster.getDistance());
+            Rectangle2D rect = fontMetrics.getStringBounds(s, g);
+            g.drawString(s, x1 - (int)rect.getWidth() , y1 - 2);
+        }
+        
         x1 = x2;
         y1 = y2;
-        x2 = x1;
         y2 = (int)(linkPoint.getY() * yDisplayFactor + yDisplayOffset);
         g.drawLine(x1, y1, x2, y2);
         
+        
         for (ClusterComponent child : children) {
-            child.paint(g, xDisplayOffset, yDisplayOffset, xDisplayFactor, yDisplayFactor);
+            child.paint(g, xDisplayOffset, yDisplayOffset, xDisplayFactor, yDisplayFactor, decorated);
         }
     }
     

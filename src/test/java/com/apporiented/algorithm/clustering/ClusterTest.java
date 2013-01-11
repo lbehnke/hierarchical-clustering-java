@@ -21,4 +21,10 @@ public class ClusterTest {
         int leafs = cluster.countLeafs();
         assertEquals(6, leafs);
     }
+    
+    @Test
+    public void testGetTotalDistance() throws Exception {
+        int dist = (int) cluster.getTotalDistance();
+        assertEquals(10, dist);
+    }
 }

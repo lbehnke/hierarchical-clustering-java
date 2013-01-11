@@ -33,7 +33,7 @@ You may want to visualize the result using the Swing component *DendrogramPanel*
     DendrogramPanel dp = new DendrogramPanel();
     dp.setModel(cluster);
 
-Whem embedded into a JFrame the dendrogram panel should display this:
+When embedded into a JFrame the dendrogram panel should display this:
 
 ![Screenshot](https://raw.github.com/lbehnke/hierarchical-clustering-java/master/etc/screenshot1.png "Average linkage")
 
@@ -43,9 +43,7 @@ Same data but different linkage strategy (MinimumLinkageStrategy) result in this
 
 Wikipedia references
 --------------------
-[Average linkage clustering](http://en.wikipedia.org/wiki/UPGMA "Average linkage clustering")
-
-[Single linkage clustering](http://en.wikipedia.org/wiki/Single-linkage_clustering "Single linkage clustering")
-
-[Complete linkage clustering](http://en.wikipedia.org/wiki/Complete_linkage_clustering "Complete linkage clustering")
+* [Average linkage clustering](http://en.wikipedia.org/wiki/UPGMA "Average linkage clustering")
+* [Single linkage clustering](http://en.wikipedia.org/wiki/Single-linkage_clustering "Single linkage clustering")
+* [Complete linkage clustering](http://en.wikipedia.org/wiki/Complete_linkage_clustering "Complete linkage clustering")
 

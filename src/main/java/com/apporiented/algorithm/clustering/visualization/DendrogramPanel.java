@@ -13,10 +13,10 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import com.apporiented.algorithm.clustering.AverageLinkageStrategy;
 import com.apporiented.algorithm.clustering.Cluster;
 import com.apporiented.algorithm.clustering.ClusteringAlgorithm;
 import com.apporiented.algorithm.clustering.DefaultClusteringAlgorithm;
-import com.apporiented.algorithm.clustering.SingleLinkageStrategy;
 
 public class DendrogramPanel extends JPanel {
 
@@ -31,11 +31,17 @@ public class DendrogramPanel extends JPanel {
 	private Cluster model;
 	private ClusterComponent component;
 	private Color lineColor = Color.BLACK;
-	private boolean showDistanceValues= false;
+	private boolean showDistanceValues = false;
+	private boolean showScale = true;
 	private int borderTop = 20;
 	private int borderLeft = 20;
 	private int borderRight = 20;
 	private int borderBottom = 20;
+	private int scalePadding = 10;
+	private int scaleTickLength = 4;
+	private int scaleTickLabelPadding = 4;
+	private double scaleValueInterval = 0;
+	private int scaleValueDecimals = 0;
 	
 	private double xModelOrigin = 0.0;
 	private double yModelOrigin = 0.0;
@@ -51,7 +57,47 @@ public class DendrogramPanel extends JPanel {
 		this.showDistanceValues = showDistanceValues;
 	}
 
-	public int getBorderTop() {
+	public boolean isShowScale() {
+        return showScale;
+    }
+
+    public void setShowScale(boolean showScale) {
+        this.showScale = showScale;
+    }
+
+    public int getScalePadding() {
+        return scalePadding;
+    }
+
+    public void setScalePadding(int scalePadding) {
+        this.scalePadding = scalePadding;
+    }
+
+    public int getScaleTickLength() {
+        return scaleTickLength;
+    }
+
+    public void setScaleTickLength(int scaleTickLength) {
+        this.scaleTickLength = scaleTickLength;
+    }
+
+    public double getScaleValueInterval() {
+        return scaleValueInterval;
+    }
+
+    public void setScaleValueInterval(double scaleTickInterval) {
+        this.scaleValueInterval = scaleTickInterval;
+    }
+
+    public int getScaleValueDecimals() {
+        return scaleValueDecimals;
+    }
+
+    public void setScaleValueDecimals(int scaleValueDecimals) {
+        this.scaleValueDecimals = scaleValueDecimals;
+    }
+
+    public int getBorderTop() {
 		return borderTop;
 	}
 
@@ -120,22 +166,18 @@ public class DendrogramPanel extends JPanel {
 	    if (cluster != null) {
 	        comp = new ClusterComponent(cluster, cluster.isLeaf(), initCoord);
 	        double leafHeight = clusterHeight / cluster.countLeafs();
-	        
-	        /* Children's y start here */
 	        double yChild = initCoord.getY() - (clusterHeight / 2);
             double distance = cluster.getDistance() == null ? 0 : cluster.getDistance();
 	        for (Cluster child : cluster.getChildren()) {
                 int childLeafCount = child.countLeafs();
                 double childHeight = childLeafCount * leafHeight;
-                
                 double childDistance = child.getDistance() == null ? 0 : child.getDistance();
                 VCoord childInitCoord = new VCoord(initCoord.getX() + (distance - childDistance) , yChild + childHeight / 2.0);
                 yChild += childHeight;
                 
                 /* Traverse cluster node tree */
                 ClusterComponent childComp = createComponent(child, childInitCoord, childHeight);
-                
-                // TODO Fix redundancy here!
+
                 childComp.setLinkPoint(initCoord);
                 comp.getChildren().add(childComp);
             }
@@ -172,12 +214,52 @@ public class DendrogramPanel extends JPanel {
 		    int nameGutterWidth = component.getMaxNameWidth(g2, false) + component.getNamePadding();
             wDisplay -= nameGutterWidth;
             
+            if (showScale) {
+                Rectangle2D rect =  g2.getFontMetrics().getStringBounds("0", g2);
+                int scaleHeight = (int)rect.getHeight() + scalePadding + scaleTickLength + scaleTickLabelPadding;
+                hDisplay -= scaleHeight;
+                yDisplayOrigin += scaleHeight;
+            }
+            
             /* Calculate conversion factor and offset for display */
             double xFactor = wDisplay / wModel;
             double yFactor = hDisplay / hModel;
             int xOffset = (int)(xDisplayOrigin - xModelOrigin * xFactor);
             int yOffset = (int)(yDisplayOrigin - yModelOrigin * yFactor);
-	        component.paint(g2, xOffset, yOffset, xFactor, yFactor);
+	        component.paint(g2, xOffset, yOffset, xFactor, yFactor, showDistanceValues);
+	        
+	        if (showScale) {
+                int x1 = xDisplayOrigin;
+                int y1 = yDisplayOrigin - scalePadding;
+                int x2 = x1 + wDisplay;
+                int y2 = y1;
+                g2.drawLine(x1, y1, x2, y2);
+                
+                double totalDistance = component.getCluster().getTotalDistance();
+                double xModelInterval;
+                if (scaleValueInterval <= 0) {
+                    xModelInterval = totalDistance / 10.0;
+                }
+                else {
+                    xModelInterval = scaleValueInterval;
+                }
+
+                int xTick = xDisplayOrigin + wDisplay;
+                y1 = (int)(yDisplayOrigin - scalePadding);
+                y2 = (int)(yDisplayOrigin - scalePadding - scaleTickLength);
+                double distanceValue = 0;
+                double xDisplayInterval = xModelInterval * xFactor;
+                while (xTick >= xDisplayOrigin) {
+                    g2.drawLine(xTick, y1, xTick, y2);
+                    
+                    String distanceValueStr = String.format("%." + scaleValueDecimals + "f", distanceValue);
+                    Rectangle2D rect =  g2.getFontMetrics().getStringBounds(distanceValueStr, g2);
+                    g2.drawString(distanceValueStr, (int)(xTick - (rect.getWidth() / 2)), y2 - scaleTickLabelPadding);
+                    xTick -= xDisplayInterval;
+                    distanceValue += xModelInterval;
+                }
+                
+	        }
 		}
 		else {
 
@@ -205,6 +287,9 @@ public class DendrogramPanel extends JPanel {
 		content.add(dp, BorderLayout.CENTER);
 		dp.setBackground(Color.WHITE);
 		dp.setLineColor(Color.BLACK);
+		dp.setScaleValueDecimals(0);
+		dp.setScaleValueInterval(1);
+		dp.setShowDistances(false);
 		
 	    Cluster cluster = createSampleCluster();
 		dp.setModel(cluster);
@@ -219,7 +304,7 @@ public class DendrogramPanel extends JPanel {
 	    String[] names = new String[] { "O1", "O2", "O3", "O4", "O5", "O6" };
 	    ClusteringAlgorithm alg = new DefaultClusteringAlgorithm();
         Cluster cluster = alg.performClustering(distances, names,
-                new SingleLinkageStrategy());
+                new AverageLinkageStrategy());
         cluster.toConsole(0);
         return cluster;
     }
