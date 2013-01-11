@@ -41,9 +41,11 @@ Same data but different linkage strategy (MinimumLinkageStrategy) result in this
 
 ![Screenshot](https://raw.github.com/lbehnke/hierarchical-clustering-java/master/etc/screenshot2.png "Minimum linkage")
 
-References
-----------
+Wikipedia references
+--------------------
 [Average linkage clustering](http://en.wikipedia.org/wiki/UPGMA "Average linkage clustering")
+
 [Single linkage clustering](http://en.wikipedia.org/wiki/Single-linkage_clustering "Single linkage clustering")
+
 [Complete linkage clustering](http://en.wikipedia.org/wiki/Complete_linkage_clustering "Complete linkage clustering")
 
