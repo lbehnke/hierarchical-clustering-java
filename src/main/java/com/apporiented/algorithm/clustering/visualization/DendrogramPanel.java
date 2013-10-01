@@ -24,8 +24,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Rectangle2D;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import com.apporiented.algorithm.clustering.AverageLinkageStrategy;
 import com.apporiented.algorithm.clustering.Cluster;
@@ -253,8 +252,8 @@ public class DendrogramPanel extends JPanel {
                 }
 
                 int xTick = xDisplayOrigin + wDisplay;
-                y1 = (int) (yDisplayOrigin - scalePadding);
-                y2 = (int) (yDisplayOrigin - scalePadding - scaleTickLength);
+                y1 = yDisplayOrigin - scalePadding;
+                y2 = yDisplayOrigin - scalePadding - scaleTickLength;
                 double distanceValue = 0;
                 double xDisplayInterval = xModelInterval * xFactor;
                 while (xTick >= xDisplayOrigin) {
@@ -283,7 +282,7 @@ public class DendrogramPanel extends JPanel {
         JFrame frame = new JFrame();
         frame.setSize(400, 300);
         frame.setLocation(400, 300);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         JPanel content = new JPanel();
         DendrogramPanel dp = new DendrogramPanel();

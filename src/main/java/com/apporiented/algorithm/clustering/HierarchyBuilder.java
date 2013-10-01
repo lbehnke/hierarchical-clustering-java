@@ -61,7 +61,7 @@ public class HierarchyBuilder {
 					distanceValues.add(link1.getLinkageDistance());
 					distances.remove(link1);
 				}
-				if (link1 != null) {
+				if (link2 != null) {
 					distanceValues.add(link2.getLinkageDistance());
 					distances.remove(link2);
 				}

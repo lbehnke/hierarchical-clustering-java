@@ -95,7 +95,7 @@ public class ClusterPair implements Comparable<ClusterPair> {
 			}
 			sb.append(rCluster.getName());
 		}
-		sb.append(" : " + linkageDistance);
+		sb.append(" : ").append(linkageDistance);
 		return sb.toString();
 	}
 

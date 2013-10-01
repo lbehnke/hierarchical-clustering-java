@@ -67,10 +67,10 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm {
 
 	private List<Cluster> createClusters(String[] clusterNames) {
 		List<Cluster> clusters = new ArrayList<Cluster>();
-		for (int col = 0; col < clusterNames.length; col++) {
-			Cluster cluster = new Cluster(clusterNames[col]);
-			clusters.add(cluster);
-		}
+        for (String clusterName : clusterNames) {
+            Cluster cluster = new Cluster(clusterName);
+            clusters.add(cluster);
+        }
 		return clusters;
 	}
 
