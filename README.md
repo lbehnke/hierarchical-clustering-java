@@ -24,6 +24,15 @@ Pass an distance matrix and a cluster name array along with an linkage strategy 
     Cluster cluster = alg.performClustering(distances, names,
         new AverageLinkageStrategy());
 
+Or you can input a [pdist](http://www.mathworks.com/help/stats/pdist.html)-like matrix with one row:
+
+    String[] names = new String[] { "O1", "O2", "O3", "O4", "O5", "O6" };
+    double[][] pdist = new double[][] {
+				{1,9,7,11,14,4,3,8,10,9,2,8,6,13,10}
+		};
+    ClusteringAlgorithm alg = new PDistClusteringAlgorithm();
+    Cluster cluster = alg.performClustering(pdist, names, new AverageLinkageStrategy());
+
 What you get out
 ----------------
 
