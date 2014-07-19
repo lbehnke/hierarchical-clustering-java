@@ -3,3 +3,5 @@
 /.project
 /target
 /bin
+/.idea
+/hierarchical-clustering.iml
