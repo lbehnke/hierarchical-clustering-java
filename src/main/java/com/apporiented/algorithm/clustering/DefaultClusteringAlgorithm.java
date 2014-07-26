@@ -39,7 +39,7 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm {
 
 		/* Setup model */
 		List<Cluster> clusters = createClusters(clusterNames);
-		List<ClusterPair> linkages = createLinkages(distances, clusters);
+        DistanceMap linkages = createLinkages(distances, clusters);
 
 		/* Process */
 		HierarchyBuilder builder = new HierarchyBuilder(clusters, linkages);
@@ -50,9 +50,9 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm {
 		return builder.getRootCluster();
 	}
 
-	private List<ClusterPair> createLinkages(double[][] distances,
+	private DistanceMap createLinkages(double[][] distances,
 	        List<Cluster> clusters) {
-		List<ClusterPair> linkages = new ArrayList<ClusterPair>();
+        DistanceMap linkages = new DistanceMap();
 		for (int col = 0; col < clusters.size(); col++) {
 			for (int row = col + 1; row < clusters.size(); row++) {
 				ClusterPair link = new ClusterPair();
