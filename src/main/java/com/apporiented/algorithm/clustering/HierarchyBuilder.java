@@ -18,7 +18,6 @@ package com.apporiented.algorithm.clustering;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 public class HierarchyBuilder {
@@ -40,9 +39,8 @@ public class HierarchyBuilder {
     }
 
     public void agglomerate(LinkageStrategy linkageStrategy) {
-        distances.sort();
-        if (distances.size() > 0) {
-            ClusterPair minDistLink = distances.remove(0);
+        ClusterPair minDistLink = distances.removeFirst();
+        if (minDistLink!=null) {
             clusters.remove(minDistLink.getrCluster());
             clusters.remove(minDistLink.getlCluster());
 
