@@ -24,11 +24,11 @@ Pass an distance matrix and a cluster name array along with an linkage strategy 
     Cluster cluster = alg.performClustering(distances, names,
         new AverageLinkageStrategy());
 
-Or you can input a [pdist](http://www.mathworks.com/help/stats/pdist.html)-like matrix with one row:
+Alternatively, you can pass a [pdist](http://www.mathworks.com/help/stats/pdist.html)-like matrix containing one row:
 
     String[] names = new String[] { "O1", "O2", "O3", "O4", "O5", "O6" };
     double[][] pdist = new double[][] {
-				{1,9,7,11,14,4,3,8,10,9,2,8,6,13,10}
+				{1, 9, 7, 11 ,14 ,4 ,3 ,8 ,10 ,9 ,2 ,8 ,6 ,13 ,10}
 		};
     ClusteringAlgorithm alg = new PDistClusteringAlgorithm();
     Cluster cluster = alg.performClustering(pdist, names, new AverageLinkageStrategy());
@@ -36,7 +36,7 @@ Or you can input a [pdist](http://www.mathworks.com/help/stats/pdist.html)-like 
 What you get out
 ----------------
 
-A *Cluster* instance is returned, that represents an hierachy of clusters based on their distances.
+The algorithm creates a *Cluster* instance representing an hierachy of clusters based on their distances.
 You may want to visualize the result using the Swing component *DendrogramPanel*:
 
     DendrogramPanel dp = new DendrogramPanel();

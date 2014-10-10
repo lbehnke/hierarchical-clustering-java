@@ -58,8 +58,7 @@ public class ClusterPair implements Comparable<ClusterPair> {
      * @return a new ClusterPair with the two left/right inverted
      */
     public ClusterPair reverse() {
-        ClusterPair cp = new ClusterPair(getrCluster(), getlCluster(), getLinkageDistance());
-        return cp;
+        return new ClusterPair(getrCluster(), getlCluster(), getLinkageDistance());
     }
 
 

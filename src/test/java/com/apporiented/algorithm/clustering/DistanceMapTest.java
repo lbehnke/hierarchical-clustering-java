@@ -18,13 +18,12 @@ public class DistanceMapTest {
     public void testMapWorksWithSameDistance() throws Exception {
         this.map.add(ab);
         this.map.add(ab);  //add the same link twice. This seems to be an error case
-        assertEquals(2,this.map.list().size());
+        assertEquals(1,this.map.list().size());
         ClusterPair remove = this.map.removeFirst();
         assertNotNull(remove);
-        assertEquals(1,this.map.list().size());  //still exists in the map(even though removeFirst will return null now)
+        assertEquals(0,this.map.list().size());  //still exists in the map(even though removeFirst will return null now)
         ClusterPair remove2 = this.map.removeFirst();
         assertNull(remove2);
-        assertEquals(0,this.map.list().size());
     }
     @Test
     public void testMapRemovalFront() throws Exception {

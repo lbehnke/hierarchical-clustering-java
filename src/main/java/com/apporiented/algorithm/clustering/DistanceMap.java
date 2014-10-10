@@ -1,10 +1,6 @@
 package com.apporiented.algorithm.clustering;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.PriorityQueue;
+import java.util.*;
 
 /**
  * Container for linkages (List<ClusterPair>())
@@ -12,25 +8,33 @@ import java.util.PriorityQueue;
  * Created by Alexandre Masselot on 7/18/14.
  */
 public class DistanceMap {
+
     private Map<String, Item> pairHash;
     private PriorityQueue<Item> data;
 
-    private class Item implements Comparable<Item>{
-        Item(ClusterPair p){
-            pair=p;
-            hash = hashCodePair(p);
-        }
+    private class Item implements Comparable<Item> {
         final ClusterPair pair;
         final String hash;
-        boolean removed=false;
+        boolean removed = false;
+
+        Item(ClusterPair p) {
+            pair = p;
+            hash = hashCodePair(p);
+        }
+
         @Override
         public int compareTo(Item o) {
             return pair.compareTo(o.pair);
         }
 
+        @Override
+        public String toString() {
+            return hash;
+        }
     }
+
     public DistanceMap() {
-        data= new PriorityQueue<Item>();
+        data = new PriorityQueue<Item>();
         pairHash = new HashMap<String, Item>();
     }
 
@@ -43,16 +47,16 @@ public class DistanceMap {
     }
 
     public ClusterPair findByCodePair(Cluster c1, Cluster c2) {
-        String inCode  = hashCodePair(c1,c2);
+        String inCode = hashCodePair(c1, c2);
         return pairHash.get(inCode).pair;
     }
 
     public ClusterPair removeFirst() {
         Item poll = data.poll();
-        while(poll!=null && poll.removed==true){
-            poll=data.poll();
+        while (poll != null && poll.removed) {
+            poll = data.poll();
         }
-        if(poll==null){
+        if (poll == null) {
             return null;
         }
         ClusterPair link = poll.pair;
@@ -62,37 +66,41 @@ public class DistanceMap {
 
     public boolean remove(ClusterPair link) {
         Item remove = pairHash.remove(hashCodePair(link));
-        if(remove==null) {
+        if (remove == null) {
             return false;
         }
-        remove.removed=true;
+        remove.removed = true;
         return true;
     }
 
+
     public boolean add(ClusterPair link) {
         Item e = new Item(link);
-        data.add(e);
-        Item priorValue = pairHash.put(e.hash, e);
-        if (priorValue != null) {
-            System.err.println("hashCode = " + priorValue.hash + " adding redundant link:" + link + " (exist:" + priorValue + ")");
+        Item existingItem = pairHash.get(e.hash);
+        if (existingItem != null) {
+            System.err.println("hashCode = " + existingItem.hash + " adding redundant link:" + link + " (exist:" + existingItem + ")");
+            return false;
+        } else {
+            pairHash.put(e.hash, e);
+            data.add(e);
+            return true;
         }
-        return true;
     }
 
 
     /**
-     * compute some kind of hashcode, symmetric on the cluster names (used for equality) and regardless of the linkageDistance
-     *
-     * @return int
+     * Compute some kind of unique ID for a given cluster pair.
+     * @return The ID
      */
-    public String hashCodePair(ClusterPair link) {
-        return hashCodePair(link.getlCluster(),link.getrCluster());
-    }
-    public String hashCodePair(Cluster lCluster,Cluster rCluseter) {
-        return hashCodePairNames(lCluster.getName(), rCluseter.getName());
+    String hashCodePair(ClusterPair link) {
+        return hashCodePair(link.getlCluster(), link.getrCluster());
     }
 
-    protected String hashCodePairNames(String lName, String rName) {
+    String hashCodePair(Cluster lCluster, Cluster rCluster) {
+        return hashCodePairNames(lCluster.getName(), rCluster.getName());
+    }
+
+    String hashCodePairNames(String lName, String rName) {
         if (lName.compareTo(rName) < 0) {
             return lName + "~~~" + rName;//getlCluster().hashCode() + 31 * (getrCluster().hashCode());
         } else {

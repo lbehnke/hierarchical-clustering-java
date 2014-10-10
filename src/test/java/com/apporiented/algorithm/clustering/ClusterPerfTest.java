@@ -27,12 +27,11 @@ import static org.junit.Assert.assertEquals;
 public class ClusterPerfTest {
 
 
-    public Cluster randomCluster(int n) {
+    Cluster randomCluster(int n) {
         ClusteringAlgorithm alg = new DefaultClusteringAlgorithm();
 
-        Cluster c = alg.performClustering(randomDataDist(n), randomDataNames(n),
+        return alg.performClustering(randomDataDist(n), randomDataNames(n),
                 new AverageLinkageStrategy());
-        return c;
     }
 
     private double[][] randomDataDist(int n) {
@@ -80,7 +79,7 @@ public class ClusterPerfTest {
 
     @Test
     public void testn() throws Exception {
-        for (int n = 2; n < 513; n = (int) (n * 2)) {
+        for (int n = 2; n < 513; n = n * 2) {
             Long t = timeN(n);
             System.out.println("" + n + "\t" + t);
         }
