@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>apporiented.com</groupId>
     <artifactId>hierarchical-clustering</artifactId>
-    <version>1.0</version>
+    <version>1.0-SNAPSHOT</version>
     <name>Agglomerative hierarchical clustering</name>
     <description>Agglomerative hierarchical clustering analysis and visualization implemented in Java</description>
 
