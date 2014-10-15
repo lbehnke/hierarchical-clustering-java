@@ -123,6 +123,7 @@
         </dependency>
     </dependencies>
 
+    <!-- Deployment into sonatype nexus repository -->
     <distributionManagement>
         <snapshotRepository>
             <id>sonatype-nexus-snapshots</id>
