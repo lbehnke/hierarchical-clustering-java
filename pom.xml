@@ -134,6 +134,6 @@
             <name>Sonatype Staging Repository</name>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
-    </distributionManagement>mvn
+    </distributionManagement>
 
 </project>
