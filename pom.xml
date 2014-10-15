@@ -2,9 +2,11 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.apporiented</groupId>
     <artifactId>hierarchical-clustering</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.0.3-SNAPSHOT</version>
     <name>Agglomerative hierarchical clustering</name>
     <description>Agglomerative hierarchical clustering analysis and visualization implemented in Java</description>
+    <inceptionYear>2011</inceptionYear>
+    <url>https://github.com/lbehnke/hierarchical-clustering-java</url>
 <!--
     <parent>
         <groupId>org.sonatype.oss</groupId>
@@ -12,6 +14,32 @@
         <version>9</version>
     </parent>
 -->
+    <developers>
+        <developer>
+            <id>lab</id>
+            <name>Lars Behnke</name>
+            <url>https://github.com/lbehnke</url>
+            <roles>
+                <role>developer</role>
+                <role>administrator</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <contributors>
+        <contributor>
+            <name>Robert Macaulay</name>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </contributor>
+        <contributor>
+            <name>Alexandre Masselot</name>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </contributor>
+    </contributors>
 
     <properties>
         <github.global.server>github</github.global.server>
@@ -22,6 +50,7 @@
         <license>
             <name>Apache License 2.0</name>
             <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+            <comments>A business-friendly OSS license</comments>
         </license>
     </licenses>
 
