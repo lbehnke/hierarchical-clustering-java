@@ -2,9 +2,16 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>apporiented.com</groupId>
     <artifactId>hierarchical-clustering</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <name>Agglomerative hierarchical clustering</name>
     <description>Agglomerative hierarchical clustering analysis and visualization implemented in Java</description>
+<!--
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>9</version>
+    </parent>
+-->
 
     <properties>
         <github.global.server>github</github.global.server>
@@ -29,6 +36,7 @@
         <name>Lars Behnke</name>
         <url>https://github.com/lbehnke</url>
     </organization>
+
 
     <build>
         <defaultGoal>install</defaultGoal>
@@ -89,6 +97,20 @@
                 </configuration>
             </plugin>
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
@@ -102,11 +124,16 @@
     </dependencies>
 
     <distributionManagement>
+        <snapshotRepository>
+            <id>sonatype-nexus-snapshots</id>
+            <name>Sonatype Snapshot Repository</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
         <repository>
-            <id>staging-repo</id>
-            <name>Temporary Staging Repository</name>
-            <url>file://${project.build.directory}/mvn-repo</url>
+            <id>sonatype-nexus-staging</id>
+            <name>Sonatype Staging Repository</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
-    </distributionManagement>
+    </distributionManagement>mvn
 
 </project>
