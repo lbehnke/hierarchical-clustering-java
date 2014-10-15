@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.apporiented</groupId>
     <artifactId>hierarchical-clustering</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.2</version>
     <name>Agglomerative hierarchical clustering</name>
     <description>Agglomerative hierarchical clustering analysis and visualization implemented in Java</description>
 <!--
@@ -29,7 +29,7 @@
         <url>https://github.com/lbehnke/hierarchical-clustering-java</url>
         <connection>scm:git:git://github.com/lbehnke/hierarchical-clustering-java.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/lbehnke/hierarchical-clustering-java.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>v1.0.2</tag>
     </scm>
 
     <organization>
