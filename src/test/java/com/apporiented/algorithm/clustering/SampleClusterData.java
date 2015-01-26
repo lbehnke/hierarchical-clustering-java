@@ -23,5 +23,6 @@ public final class SampleClusterData {
             { 7, 3, 9, 0, 6, 13 }, { 11, 8, 2, 6, 0, 10 },
             { 14, 10, 8, 13, 10, 0 } };
     public static final String[] NAMES = new String[] { "O1", "O2", "O3", "O4", "O5", "O6" };
+	public static final String[] NAMES_WITH_DUPLICATE = new String[] { "O2", "O2", "O3", "O4", "O5", "O6" };
 
 }
