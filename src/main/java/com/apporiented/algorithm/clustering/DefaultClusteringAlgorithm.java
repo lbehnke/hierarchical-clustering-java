@@ -17,6 +17,8 @@
 package com.apporiented.algorithm.clustering;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 public class DefaultClusteringAlgorithm implements ClusteringAlgorithm {
@@ -36,7 +38,10 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm {
 		if (linkageStrategy == null) {
 			throw new IllegalArgumentException("Undefined linkage strategy");
 		}
-
+		int uniqueCount=new HashSet<String>(Arrays.asList(clusterNames)).size();
+		if (uniqueCount != clusterNames.length) {
+			throw new IllegalArgumentException("Duplicate names");
+		}
 		/* Setup model */
 		List<Cluster> clusters = createClusters(clusterNames);
         DistanceMap linkages = createLinkages(distances, clusters);
