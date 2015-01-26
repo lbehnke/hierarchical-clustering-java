@@ -34,9 +34,20 @@ public class DefaultClusteringAlgorithmTest {
 	@Test
 	public void testClusteringAvgLink() {
 		ClusteringAlgorithm alg = new DefaultClusteringAlgorithm();
-		Cluster c = alg.performClustering(distances, names,
-		        new AverageLinkageStrategy());
+		Cluster c = alg.performClustering(distances, names, new AverageLinkageStrategy());
 		Assert.assertNotNull(c);
+	}
+
+	@Test
+	public void testDuplicateNames() {
+		ClusteringAlgorithm alg = new DefaultClusteringAlgorithm();
+		try {
+			Cluster c = alg.performClustering(distances, SampleClusterData.NAMES_WITH_DUPLICATE,
+					new AverageLinkageStrategy());
+			Assert.fail("Exception expected");
+		} catch (IllegalArgumentException e) {
+			Assert.assertEquals("Duplicate names", e.getMessage());
+		}
 	}
 
 }
