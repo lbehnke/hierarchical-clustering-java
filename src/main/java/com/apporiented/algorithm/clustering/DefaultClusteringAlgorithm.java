@@ -27,8 +27,23 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm {
 	public Cluster performClustering(double[][] distances,
 	        String[] clusterNames, LinkageStrategy linkageStrategy) {
 
-		/* Argument checks */
-		if (distances == null || distances.length == 0
+    checkArguments(distances, clusterNames, linkageStrategy);
+    /* Setup model */
+    List<Cluster> clusters = createClusters(clusterNames);
+    DistanceMap linkages = createLinkages(distances, clusters);
+
+    /* Process */
+    HierarchyBuilder builder = new HierarchyBuilder(clusters, linkages);
+    while (!builder.isTreeComplete()) {
+      builder.agglomerate(linkageStrategy);
+    }
+
+    return builder.getRootCluster();
+  }
+
+  private void checkArguments(double[][] distances, String[] clusterNames,
+      LinkageStrategy linkageStrategy) {
+    if (distances == null || distances.length == 0
 		        || distances[0].length != distances.length) {
 			throw new IllegalArgumentException("Invalid distance matrix");
 		}
@@ -42,20 +57,32 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm {
 		if (uniqueCount != clusterNames.length) {
 			throw new IllegalArgumentException("Duplicate names");
 		}
-		/* Setup model */
-		List<Cluster> clusters = createClusters(clusterNames);
-        DistanceMap linkages = createLinkages(distances, clusters);
+  }
 
-		/* Process */
-		HierarchyBuilder builder = new HierarchyBuilder(clusters, linkages);
-		while (!builder.isTreeComplete()) {
-			builder.agglomerate(linkageStrategy);
-		}
+  @Override
+  public Cluster performWeightedClustering(double[][] distances, String[] clusterNames,
+      double[] weights, LinkageStrategy linkageStrategy) {
 
-		return builder.getRootCluster();
-	}
+    checkArguments(distances, clusterNames, linkageStrategy);
 
-	private DistanceMap createLinkages(double[][] distances,
+    if (weights.length != clusterNames.length) {
+      throw new IllegalArgumentException("Invalid weights array");
+    }
+
+    /* Setup model */
+    List<Cluster> clusters = createClusters(clusterNames, weights);
+    DistanceMap linkages = createLinkages(distances, clusters);
+
+    /* Process */
+    HierarchyBuilder builder = new HierarchyBuilder(clusters, linkages);
+    while (!builder.isTreeComplete()) {
+      builder.agglomerate(linkageStrategy);
+    }
+
+    return builder.getRootCluster();
+  }
+
+  private DistanceMap createLinkages(double[][] distances,
 	        List<Cluster> clusters) {
         DistanceMap linkages = new DistanceMap();
 		for (int col = 0; col < clusters.size(); col++) {
@@ -78,5 +105,15 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm {
         }
 		return clusters;
 	}
+
+  private List<Cluster> createClusters(String[] clusterNames, double[] weights) {
+    List<Cluster> clusters = new ArrayList<Cluster>();
+    for (int i = 0; i < weights.length; i++) {
+      Cluster cluster = new Cluster(clusterNames[i]);
+      cluster.setWeight(weights[i]);
+      clusters.add(cluster);
+    }
+    return clusters;
+  }
 
 }

@@ -50,6 +50,12 @@ public class PDistClusteringAlgorithm implements ClusteringAlgorithm {
 		return builder.getRootCluster();
 	}
 
+  @Override
+  public Cluster performWeightedClustering(double[][] distances, String[] clusterNames,
+      double[] weights, LinkageStrategy linkageStrategy) {
+    return performClustering(distances, clusterNames, linkageStrategy);
+  }
+
 	private DistanceMap createLinkages(double[][] distances,
 			List<Cluster> clusters) {
 		DistanceMap linkages = new DistanceMap();

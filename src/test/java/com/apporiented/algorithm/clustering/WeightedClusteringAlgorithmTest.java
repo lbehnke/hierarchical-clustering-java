@@ -16,15 +16,29 @@
 
 package com.apporiented.algorithm.clustering;
 
-public final class SampleClusterData {
+import static com.apporiented.algorithm.clustering.SampleClusterData.*;
 
-  public static final double[][] DISTANCES = new double[][] { { 0, 1, 9, 7, 11, 14 },
-      { 1, 0, 4, 3, 8, 10 }, { 9, 4, 0, 9, 2, 8 }, { 7, 3, 9, 0, 6, 13 }, { 11, 8, 2, 6, 0, 10 },
-      { 14, 10, 8, 13, 10, 0 } };
-  public static final String[] NAMES = new String[] { "O1", "O2", "O3", "O4", "O5", "O6" };
-  public static final double[] WEIGHTS = new double[] { 1, 2, 3, 4, 5, 6 };
+import javax.swing.JFrame;
 
-  public static final String[] NAMES_WITH_DUPLICATE = new String[] { "O2", "O2", "O3", "O4", "O5",
-      "O6" };
+import org.junit.Assert;
+import org.junit.Test;
 
+import com.apporiented.algorithm.clustering.visualization.DendrogramPanel;
+
+public class WeightedClusteringAlgorithmTest {
+
+  @Test
+  public void testClusteringAvgLink() {
+    ClusteringAlgorithm alg = new DefaultClusteringAlgorithm();
+    Cluster c = alg.performWeightedClustering(DISTANCES, NAMES, WEIGHTS,
+        new WeightedLinkageStrategy());
+    DendrogramPanel dp = new DendrogramPanel();
+    dp.setModel(c);
+    JFrame f = new JFrame();
+    f.setContentPane(dp);
+    f.pack();
+    f.setVisible(true);
+    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    Assert.assertNotNull(c);
+  }
 }
