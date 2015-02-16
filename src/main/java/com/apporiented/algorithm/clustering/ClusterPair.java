@@ -30,6 +30,10 @@ public class ClusterPair implements Comparable<ClusterPair> {
         linkageDistance=distance;
     }
 
+  public Cluster getOtherCluster(Cluster c) {
+    return lCluster == c ? rCluster : lCluster;
+  }
+
     public Cluster getlCluster() {
         return lCluster;
     }

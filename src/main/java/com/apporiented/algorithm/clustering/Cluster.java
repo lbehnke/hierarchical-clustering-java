@@ -27,9 +27,19 @@ public class Cluster {
 
 	private List<Cluster> children;
 
-	private Double distance;
+  private Double distance;
 
-	public Double getDistance() {
+  private Double weight;
+
+  public Double getWeight() {
+    return weight;
+  }
+
+  public void setWeight(Double weight) {
+    this.weight = weight;
+  }
+
+  public Double getDistance() {
 		return distance;
 	}
 
