@@ -88,7 +88,7 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm {
 		for (int col = 0; col < clusters.size(); col++) {
 			for (int row = col + 1; row < clusters.size(); row++) {
 				ClusterPair link = new ClusterPair();
-				link.setLinkageDistance(distances[col][row]);
+				link.setLinkageDistance(new Distance(distances[col][row]));
 				link.setlCluster(clusters.get(col));
 				link.setrCluster(clusters.get(row));
 				linkages.add(link);
@@ -110,7 +110,7 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm {
     List<Cluster> clusters = new ArrayList<Cluster>();
     for (int i = 0; i < weights.length; i++) {
       Cluster cluster = new Cluster(clusterNames[i]);
-      cluster.setWeight(weights[i]);
+      cluster.setDistance(new Distance(null, weights[i]));
       clusters.add(cluster);
     }
     return clusters;

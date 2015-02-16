@@ -20,5 +20,5 @@ import java.util.Collection;
 
 public interface LinkageStrategy {
 
-	public Double calculateDistance(Collection<Double> distances);
+	public Distance calculateDistance(Collection<Distance> distances);
 }

@@ -174,11 +174,11 @@ public class DendrogramPanel extends JPanel {
             comp = new ClusterComponent(cluster, cluster.isLeaf(), initCoord);
             double leafHeight = clusterHeight / cluster.countLeafs();
             double yChild = initCoord.getY() - (clusterHeight / 2);
-            double distance = cluster.getDistance() == null ? 0 : cluster.getDistance();
+            double distance = cluster.getDistanceValue() == null ? 0 : cluster.getDistanceValue();
             for (Cluster child : cluster.getChildren()) {
                 int childLeafCount = child.countLeafs();
                 double childHeight = childLeafCount * leafHeight;
-                double childDistance = child.getDistance() == null ? 0 : child.getDistance();
+                double childDistance = child.getDistanceValue() == null ? 0 : child.getDistanceValue();
                 VCoord childInitCoord = new VCoord(initCoord.getX() + (distance - childDistance), yChild + childHeight
                         / 2.0);
                 yChild += childHeight;

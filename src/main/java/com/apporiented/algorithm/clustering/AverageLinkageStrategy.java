@@ -21,18 +21,18 @@ import java.util.Collection;
 public class AverageLinkageStrategy implements LinkageStrategy {
 
 	@Override
-	public Double calculateDistance(Collection<Double> distances) {
+	public Distance calculateDistance(Collection<Distance> distances) {
 		double sum = 0;
 		double result;
 
-		for (Double dist : distances) {
-			sum += dist;
+		for (Distance dist : distances) {
+			sum += dist.getDistance();
 		}
 		if (distances.size() > 0) {
 			result = sum / distances.size();
 		} else {
 			result = 0.0;
 		}
-		return result;
+		return  new Distance(result);
 	}
 }
