@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2013 Lars Behnke
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,80 +21,78 @@ import java.util.List;
 
 public class Cluster {
 
-	private String name;
-	
-	private Cluster parent;
+    private String name;
 
-	private List<Cluster> children;
+    private Cluster parent;
 
-  private Double distance;
+    private List<Cluster> children;
 
-  private Double weight;
+	private Distance distance = new Distance();
 
-  public Double getWeight() {
-    return weight;
-  }
+    public Distance getDistance() {
+        return distance;
+    }
 
-  public void setWeight(Double weight) {
-    this.weight = weight;
-  }
+    public Double getWeightValue() {
+		return distance.getWeight();
+    }
 
-  public Double getDistance() {
-		return distance;
-	}
+    public Double getDistanceValue() {
+		return distance.getDistance();
+    }
 
-	public void setDistance(Double distance) {
-		this.distance = distance;
-	}
+    public void setDistance(Distance distance) {
+        this.distance = distance;
+    }
 
-	public List<Cluster> getChildren() {
-		if (children == null) {
-			children = new ArrayList<Cluster>();
-		}
+    public List<Cluster> getChildren() {
+        if (children == null) {
+            children = new ArrayList<Cluster>();
+        }
 
-		return children;
-	}
+        return children;
+    }
 
-	public void setChildren(List<Cluster> children) {
-		this.children = children;
-	}
+    public void setChildren(List<Cluster> children) {
+        this.children = children;
+    }
 
-	public Cluster getParent() {
-		return parent;
-	}
+    public Cluster getParent() {
+        return parent;
+    }
 
-	public void setParent(Cluster parent) {
-		this.parent = parent;
-	}
+    public void setParent(Cluster parent) {
+        this.parent = parent;
+    }
 
-	
-	public Cluster(String name) {
-		this.name = name;
-	}
 
-	public String getName() {
-		return name;
-	}
+    public Cluster(String name) {
+        this.name = name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void addChild(Cluster cluster) {
-		getChildren().add(cluster);
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	}
+    public void addChild(Cluster cluster) {
+        getChildren().add(cluster);
 
-	public boolean contains(Cluster cluster) {
-		return getChildren().contains(cluster);
-	}
+    }
 
-	@Override
-	public String toString() {
-		return "Cluster " + name;
-	}
+    public boolean contains(Cluster cluster) {
+        return getChildren().contains(cluster);
+    }
 
-	@Override
+    @Override
+    public String toString() {
+        return "Cluster " + name;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -116,18 +114,18 @@ public class Cluster {
         return true;
     }
 
-	@Override
+    @Override
     public int hashCode() {
         return (name == null) ? 0 : name.hashCode();
     }
 
-	public boolean isLeaf() {
-		return getChildren().size() == 0;
-	}
-	
-	public int countLeafs() {
-	    return countLeafs(this, 0);
-	}
+    public boolean isLeaf() {
+        return getChildren().size() == 0;
+    }
+
+    public int countLeafs() {
+        return countLeafs(this, 0);
+    }
 
     public int countLeafs(Cluster node, int count) {
         if (node.isLeaf()) count++;
@@ -136,11 +134,11 @@ public class Cluster {
         }
         return count;
     }
-    
+
     public void toConsole(int indent) {
         for (int i = 0; i < indent; i++) {
             System.out.print("  ");
-            
+
         }
         String name = getName() + (isLeaf() ? " (leaf)" : "") + (distance != null ? "  distance: " + distance : "");
         System.out.println(name);
@@ -150,12 +148,12 @@ public class Cluster {
     }
 
     public double getTotalDistance() {
-        double dist = getDistance() == null ? 0 : getDistance();
+        Double dist = getDistance() == null ? 0 : getDistance().getDistance();
         if (getChildren().size() > 0) {
             dist += children.get(0).getTotalDistance();
         }
         return dist;
 
     }
-	   
+
 }

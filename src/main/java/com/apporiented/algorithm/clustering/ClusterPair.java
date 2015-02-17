@@ -20,11 +20,12 @@ public class ClusterPair implements Comparable<ClusterPair> {
 
     private Cluster lCluster;
     private Cluster rCluster;
-    private Double linkageDistance;
+	private Double linkageDistance;
 
     public ClusterPair(){
     }
-    public ClusterPair(Cluster left, Cluster right, Double distance){
+
+	public ClusterPair(Cluster left, Cluster right, Double distance) {
         lCluster=left;
         rCluster=right;
         linkageDistance=distance;
@@ -50,11 +51,11 @@ public class ClusterPair implements Comparable<ClusterPair> {
         this.rCluster = rCluster;
     }
 
-    public Double getLinkageDistance() {
+	public Double getLinkageDistance() {
         return linkageDistance;
     }
 
-    public void setLinkageDistance(Double distance) {
+	public void setLinkageDistance(Double distance) {
         this.linkageDistance = distance;
     }
 
@@ -96,11 +97,17 @@ public class ClusterPair implements Comparable<ClusterPair> {
             name = sb.toString();
         }
         Cluster cluster = new Cluster(name);
-        cluster.setDistance(getLinkageDistance());
+        cluster.setDistance(new Distance(getLinkageDistance()));
         cluster.addChild(lCluster);
         cluster.addChild(rCluster);
         lCluster.setParent(cluster);
         rCluster.setParent(cluster);
+
+        Double lWeight = lCluster.getWeightValue();
+        Double rWeight = rCluster.getWeightValue();
+		double weight = lWeight + rWeight;
+        cluster.getDistance().setWeight(weight);
+
         return cluster;
     }
 

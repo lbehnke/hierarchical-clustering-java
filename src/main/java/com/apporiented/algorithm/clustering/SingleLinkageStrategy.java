@@ -21,13 +21,13 @@ import java.util.Collection;
 public class SingleLinkageStrategy implements LinkageStrategy {
 
 	@Override
-	public Double calculateDistance(Collection<Double> distances) {
+	public Distance calculateDistance(Collection<Distance> distances) {
 		double min = Double.NaN;
 
-		for (Double dist : distances) {
-		    if (Double.isNaN(min) || dist < min)
-		        min = dist;
+		for (Distance dist : distances) {
+		    if (Double.isNaN(min) || dist.getDistance() < min)
+		        min = dist.getDistance();
 		}
-		return min;
+		return new Distance(min);
 	}
 }

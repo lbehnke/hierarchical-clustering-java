@@ -22,80 +22,76 @@ import java.util.List;
 
 public class HierarchyBuilder {
 
-  private DistanceMap distances;
-  private List<Cluster> clusters;
+    private DistanceMap distances;
+    private List<Cluster> clusters;
 
-  public DistanceMap getDistances() {
-    return distances;
-  }
-
-  public List<Cluster> getClusters() {
-    return clusters;
-  }
-
-  public HierarchyBuilder(List<Cluster> clusters, DistanceMap distances) {
-    this.clusters = clusters;
-    this.distances = distances;
-  }
-
-  public void agglomerate(LinkageStrategy linkageStrategy) {
-    ClusterPair minDistLink = distances.removeFirst();
-    if (minDistLink != null) {
-      clusters.remove(minDistLink.getrCluster());
-      clusters.remove(minDistLink.getlCluster());
-
-      Cluster oldClusterL = minDistLink.getlCluster();
-      Cluster oldClusterR = minDistLink.getrCluster();
-      Cluster newCluster = minDistLink.agglomerate(null);
-      newCluster.setWeight(oldClusterL.getWeight() + oldClusterR.getWeight());
-
-      for (Cluster iClust : clusters) {
-        ClusterPair link1 = findByClusters(iClust, oldClusterL);
-        ClusterPair link2 = findByClusters(iClust, oldClusterR);
-        ClusterPair newLinkage = new ClusterPair();
-        newLinkage.setlCluster(iClust);
-        newLinkage.setrCluster(newCluster);
-        List<Double> distanceValues = new ArrayList<Double>();
-        List<Double> weights = new ArrayList<Double>();
-
-        if (link1 != null) {
-          distanceValues.add(link1.getLinkageDistance());
-          weights.add(link1.getOtherCluster(iClust).getWeight());
-          distances.remove(link1);
-        }
-        if (link2 != null) {
-          distanceValues.add(link2.getLinkageDistance());
-          weights.add(link2.getOtherCluster(iClust).getWeight());
-          distances.remove(link2);
-        }
-        Double newDistance;
-        if (linkageStrategy instanceof WeightedLinkageStrategy) {
-          WeightedLinkageStrategy weighted = (WeightedLinkageStrategy) linkageStrategy;
-          newDistance = weighted.calculateDistance(distanceValues, weights);
-        } else {
-          newDistance = linkageStrategy.calculateDistance(distanceValues);
-        }
-        newLinkage.setLinkageDistance(newDistance);
-        distances.add(newLinkage);
-
-      }
-      clusters.add(newCluster);
+    public DistanceMap getDistances() {
+        return distances;
     }
-  }
 
-  private ClusterPair findByClusters(Cluster c1, Cluster c2) {
-    return distances.findByCodePair(c1, c2);
-  }
-
-  public boolean isTreeComplete() {
-    return clusters.size() == 1;
-  }
-
-  public Cluster getRootCluster() {
-    if (!isTreeComplete()) {
-      throw new RuntimeException("No root available");
+    public List<Cluster> getClusters() {
+        return clusters;
     }
-    return clusters.get(0);
-  }
+
+    public HierarchyBuilder(List<Cluster> clusters, DistanceMap distances) {
+        this.clusters = clusters;
+        this.distances = distances;
+    }
+
+    public void agglomerate(LinkageStrategy linkageStrategy) {
+        ClusterPair minDistLink = distances.removeFirst();
+        if (minDistLink != null) {
+            clusters.remove(minDistLink.getrCluster());
+            clusters.remove(minDistLink.getlCluster());
+
+            Cluster oldClusterL = minDistLink.getlCluster();
+            Cluster oldClusterR = minDistLink.getrCluster();
+            Cluster newCluster = minDistLink.agglomerate(null);
+
+            for (Cluster iClust : clusters) {
+                ClusterPair link1 = findByClusters(iClust, oldClusterL);
+                ClusterPair link2 = findByClusters(iClust, oldClusterR);
+                ClusterPair newLinkage = new ClusterPair();
+                newLinkage.setlCluster(iClust);
+                newLinkage.setrCluster(newCluster);
+                Collection<Distance> distanceValues = new ArrayList<Distance>();
+
+                if (link1 != null) {
+					Double distVal = link1.getLinkageDistance();
+                    Double weightVal = link1.getOtherCluster(iClust).getWeightValue();
+                    distanceValues.add(new Distance(distVal, weightVal));
+                    distances.remove(link1);
+                }
+                if (link2 != null) {
+					Double distVal = link2.getLinkageDistance();
+					Double weightVal = link2.getOtherCluster(iClust).getWeightValue();
+                    distanceValues.add(new Distance(distVal, weightVal));
+                    distances.remove(link2);
+                }
+
+                Distance newDistance = linkageStrategy.calculateDistance(distanceValues);
+
+				newLinkage.setLinkageDistance(newDistance.getDistance());
+                distances.add(newLinkage);
+
+            }
+            clusters.add(newCluster);
+        }
+    }
+
+    private ClusterPair findByClusters(Cluster c1, Cluster c2) {
+        return distances.findByCodePair(c1, c2);
+    }
+
+    public boolean isTreeComplete() {
+        return clusters.size() == 1;
+    }
+
+    public Cluster getRootCluster() {
+        if (!isTreeComplete()) {
+            throw new RuntimeException("No root available");
+        }
+        return clusters.get(0);
+    }
 
 }
