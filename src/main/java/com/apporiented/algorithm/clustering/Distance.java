@@ -8,7 +8,7 @@ import java.util.Comparator;
 public class Distance implements Comparable<Distance>, Cloneable {
 
     private Double distance;
-    private Double weight;
+	private Double weight = 1.0;
 
     public Distance() {
         this(null, null);
