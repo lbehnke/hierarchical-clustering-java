@@ -27,18 +27,18 @@ public class Cluster {
 
     private List<Cluster> children;
 
-    private Distance distance;
+	private Distance distance = new Distance();
 
     public Distance getDistance() {
         return distance;
     }
 
     public Double getWeightValue() {
-        return distance == null ? null : distance.getWeight();
+		return distance.getWeight();
     }
 
     public Double getDistanceValue() {
-        return distance == null ? null : distance.getDistance();
+		return distance.getDistance();
     }
 
     public void setDistance(Distance distance) {

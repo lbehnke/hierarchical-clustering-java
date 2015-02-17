@@ -1,6 +1,5 @@
 package com.apporiented.algorithm.clustering;
 
-import java.util.Comparator;
 
 /**
  * Created by lars on 16.02.15.
@@ -8,18 +7,14 @@ import java.util.Comparator;
 public class Distance implements Comparable<Distance>, Cloneable {
 
     private Double distance;
-	private Double weight = 1.0;
+	private Double weight;
 
     public Distance() {
-        this(null, null);
-    }
-
-    public Distance(Distance distance) {
-        this(distance.getDistance(), distance.getWeight());
+		this(0.0);
     }
 
     public Distance(Double distance) {
-        this(distance, null);
+		this(distance, 1.0);
     }
 
     public Distance(Double distance, Double weight) {
@@ -52,5 +47,8 @@ public class Distance implements Comparable<Distance>, Cloneable {
         return distance == null ? 1 : getDistance().compareTo(distance.getDistance());
     }
 
-
+	@Override
+	public String toString() {
+		return String.format("distance : %.2f, weight : %.2f", distance, weight);
+	}
 }

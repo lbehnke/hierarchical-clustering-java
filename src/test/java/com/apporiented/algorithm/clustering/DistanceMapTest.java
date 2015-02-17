@@ -10,9 +10,9 @@ import static org.junit.Assert.assertTrue;
 
 public class DistanceMapTest {
     DistanceMap map = new DistanceMap();
-    ClusterPair ab = new ClusterPair(new Cluster("a"), new Cluster("b"), new Distance(1.0));
-    ClusterPair bc= new ClusterPair(new Cluster("b"), new Cluster("c"), new Distance(2.0));
-    ClusterPair ca= new ClusterPair(new Cluster("c"), new Cluster("a"), new Distance(3.0));
+	ClusterPair ab = new ClusterPair(new Cluster("a"), new Cluster("b"), 1.0);
+	ClusterPair bc = new ClusterPair(new Cluster("b"), new Cluster("c"), 2.0);
+	ClusterPair ca = new ClusterPair(new Cluster("c"), new Cluster("a"), 3.0);
 
     @Test
     public void testMapWorksWithSameDistance() throws Exception {

@@ -29,7 +29,6 @@ public class WeightedLinkageStrategy implements LinkageStrategy {
             sum += distance.getDistance() * distance.getWeight();
         }
 
-        // TODO put total weight into result?
-        return new Distance(sum / weightTotal);
+		return new Distance(sum / weightTotal, weightTotal);
     }
 }
