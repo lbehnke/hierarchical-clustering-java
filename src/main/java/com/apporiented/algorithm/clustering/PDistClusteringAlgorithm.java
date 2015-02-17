@@ -65,7 +65,7 @@ public class PDistClusteringAlgorithm implements ClusteringAlgorithm {
                 ClusterPair link = new ClusterPair();
                 Double d = distances[0][accessFunction(row, col,
                         clusters.size())];
-                link.setLinkageDistance(new Distance(d));
+				link.setLinkageDistance(d);
                 link.setlCluster(cluster_col);
                 link.setrCluster(clusters.get(row));
                 linkages.add(link);

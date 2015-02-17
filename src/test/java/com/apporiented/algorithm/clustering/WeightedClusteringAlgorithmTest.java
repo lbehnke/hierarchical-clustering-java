@@ -32,9 +32,6 @@ public class WeightedClusteringAlgorithmTest {
 		Cluster ca = alg.performWeightedClustering(DISTANCES, NAMES, WEIGHTSA, new WeightedLinkageStrategy());
 		Assert.assertEquals("D", ca.getChildren().get(0).getName());
 		Cluster cd = alg.performWeightedClustering(DISTANCES, NAMES, WEIGHTSD, new WeightedLinkageStrategy());
-
-
-       // TODO fix this
-       Assert.assertEquals("A", cd.getChildren().get(0).getName());
+		Assert.assertEquals("A", cd.getChildren().get(0).getName());
 	}
 }

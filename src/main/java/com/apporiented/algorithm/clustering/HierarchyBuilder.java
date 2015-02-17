@@ -57,21 +57,21 @@ public class HierarchyBuilder {
                 Collection<Distance> distanceValues = new ArrayList<Distance>();
 
                 if (link1 != null) {
-                    Double distVal = link1.getLinkageDistance().getDistance();
+					Double distVal = link1.getLinkageDistance();
                     Double weightVal = link1.getOtherCluster(iClust).getWeightValue();
                     distanceValues.add(new Distance(distVal, weightVal));
                     distances.remove(link1);
                 }
                 if (link2 != null) {
-                    Double distVal = link2.getLinkageDistance().getDistance();
-                    Double weightVal = link1.getOtherCluster(iClust).getWeightValue();
+					Double distVal = link2.getLinkageDistance();
+					Double weightVal = link2.getOtherCluster(iClust).getWeightValue();
                     distanceValues.add(new Distance(distVal, weightVal));
                     distances.remove(link2);
                 }
 
                 Distance newDistance = linkageStrategy.calculateDistance(distanceValues);
 
-                newLinkage.setLinkageDistance(newDistance);
+				newLinkage.setLinkageDistance(newDistance.getDistance());
                 distances.add(newLinkage);
 
             }
