@@ -16,7 +16,7 @@
 -->
     <developers>
         <developer>
-            <id>lab</id>
+            <id>lbehnke</id>
             <name>Lars Behnke</name>
             <url>https://github.com/lbehnke</url>
             <roles>
@@ -27,6 +27,13 @@
     </developers>
 
     <contributors>
+        <contributor>
+            <name>Michel Daviot</name>
+            <url>https://github.com/tyrcho</url>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </contributor>
         <contributor>
             <name>Robert Macaulay</name>
             <roles>
