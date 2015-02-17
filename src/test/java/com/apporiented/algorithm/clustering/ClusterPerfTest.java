@@ -16,7 +16,6 @@
 
 package com.apporiented.algorithm.clustering;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Random;
@@ -25,7 +24,6 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 public class ClusterPerfTest {
-
 
     Cluster randomCluster(int n) {
         ClusteringAlgorithm alg = new DefaultClusteringAlgorithm();

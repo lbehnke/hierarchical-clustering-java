@@ -18,6 +18,8 @@ package com.apporiented.algorithm.clustering;
 
 public class ClusterPair implements Comparable<ClusterPair> {
 
+    private static long globalIndex = 0;
+
     private Cluster lCluster;
     private Cluster rCluster;
 	private Double linkageDistance;
@@ -82,8 +84,12 @@ public class ClusterPair implements Comparable<ClusterPair> {
         return result;
     }
 
+
     public Cluster agglomerate(String name) {
         if (name == null) {
+            name = "clstr#" + (++globalIndex);
+
+            /*
             StringBuilder sb = new StringBuilder();
             if (lCluster != null) {
                 sb.append(lCluster.getName());
@@ -95,6 +101,7 @@ public class ClusterPair implements Comparable<ClusterPair> {
                 sb.append(rCluster.getName());
             }
             name = sb.toString();
+            */
         }
         Cluster cluster = new Cluster(name);
         cluster.setDistance(new Distance(getLinkageDistance()));
