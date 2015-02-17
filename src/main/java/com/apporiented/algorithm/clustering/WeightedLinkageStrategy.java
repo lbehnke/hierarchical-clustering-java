@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2013 Lars Behnke
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,22 +16,20 @@
 
 package com.apporiented.algorithm.clustering;
 
-import java.util.List;
+import java.util.Collection;
 
-public class WeightedLinkageStrategy extends AverageLinkageStrategy {
+public class WeightedLinkageStrategy implements LinkageStrategy {
 
-  public Double calculateDistance(List<Double> distances, List<Double> weights) {
-    int size = distances.size();
-    assert (size == weights.size());
-    assert (size > 0);
-    double sum = 0;
-    double weightTotal = 0;
+    @Override
+    public Distance calculateDistance(Collection<Distance> distances) {
+        double sum = 0;
+        double weightTotal = 0;
+        for (Distance distance : distances) {
+            weightTotal += distance.getWeight();
+            sum += distance.getDistance() * distance.getWeight();
+        }
 
-    for (int i = 0; i < size; i++) {
-      double w = weights.get(i);
-      weightTotal += w;
-      sum += distances.get(i) * w;
+        // TODO put total weight into result?
+        return new Distance(sum / weightTotal);
     }
-    return sum / weightTotal;
-  }
 }
