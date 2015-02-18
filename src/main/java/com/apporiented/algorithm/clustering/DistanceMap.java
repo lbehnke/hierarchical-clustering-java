@@ -3,7 +3,7 @@ package com.apporiented.algorithm.clustering;
 import java.util.*;
 
 /**
- * Container for linkages (List<ClusterPair>())
+ * Container for linkages
  * with the minimal methods needed in the package
  * Created by Alexandre Masselot on 7/18/14.
  */
