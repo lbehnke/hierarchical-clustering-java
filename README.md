@@ -9,7 +9,7 @@ Implementation of an agglomerative hierarchical clustering algorithm in Java. Di
 What you put in
 ---------------
 
-Pass an distance matrix and a cluster name array along with an linkage strategy to the clustering algorithm:
+Pass an distance matrix and a cluster name array along with a linkage strategy to the clustering algorithm:
 
     String[] names = new String[] { "O1", "O2", "O3", "O4", "O5", "O6" };
     double[][] distances = new double[][] { 
