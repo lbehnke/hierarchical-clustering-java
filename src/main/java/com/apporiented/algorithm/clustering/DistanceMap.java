@@ -87,6 +87,14 @@ public class DistanceMap {
         }
     }
 
+    /**
+     * Peak into the minimum distance
+     * @return
+     */
+    public Double minDist()
+    {
+        return data.peek().pair.getLinkageDistance();
+    }
 
     /**
      * Compute some kind of unique ID for a given cluster pair.

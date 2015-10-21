@@ -51,6 +51,31 @@ public class PDistClusteringAlgorithm implements ClusteringAlgorithm {
     }
 
     @Override
+    public List<Cluster> performFlatClustering(double[][] distances,
+                                     String[] clusterNames, LinkageStrategy linkageStrategy, Double threshold) {
+
+		/* Argument checks */
+        if (distances == null || distances.length == 0) {
+            throw new IllegalArgumentException("Invalid distance matrix");
+        }
+        if (distances[0].length != clusterNames.length
+                * (clusterNames.length - 1) / 2) {
+            throw new IllegalArgumentException("Invalid cluster name array");
+        }
+        if (linkageStrategy == null) {
+            throw new IllegalArgumentException("Undefined linkage strategy");
+        }
+
+		/* Setup model */
+        List<Cluster> clusters = createClusters(clusterNames);
+        DistanceMap linkages = createLinkages(distances, clusters);
+
+		/* Process */
+        HierarchyBuilder builder = new HierarchyBuilder(clusters, linkages);
+        return builder.flatAgg(linkageStrategy, threshold);
+    }
+
+    @Override
     public Cluster performWeightedClustering(double[][] distances, String[] clusterNames,
                                              double[] weights, LinkageStrategy linkageStrategy) {
         return performClustering(distances, clusterNames, linkageStrategy);
@@ -78,6 +103,7 @@ public class PDistClusteringAlgorithm implements ClusteringAlgorithm {
         List<Cluster> clusters = new ArrayList<Cluster>();
         for (String clusterName : clusterNames) {
             Cluster cluster = new Cluster(clusterName);
+            cluster.addLeafName(clusterName);
             clusters.add(cluster);
         }
         return clusters;

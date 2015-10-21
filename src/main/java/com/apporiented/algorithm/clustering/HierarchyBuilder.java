@@ -38,6 +38,20 @@ public class HierarchyBuilder {
         this.distances = distances;
     }
 
+    /**
+     * Returns Flattened clusters, i.e. clusters that are at least apart by a given threshold
+     * @param linkageStrategy
+     * @param threshold
+     * @return
+     */
+    public List<Cluster> flatAgg(LinkageStrategy linkageStrategy, Double threshold)
+    {
+        while(!isTreeComplete() && distances.minDist() != null && distances.minDist() <= threshold)
+            agglomerate(linkageStrategy);
+
+        return clusters;
+    }
+
     public void agglomerate(LinkageStrategy linkageStrategy) {
         ClusterPair minDistLink = distances.removeFirst();
         if (minDistLink != null) {

@@ -105,6 +105,9 @@ public class ClusterPair implements Comparable<ClusterPair> {
         }
         Cluster cluster = new Cluster(name);
         cluster.setDistance(new Distance(getLinkageDistance()));
+        //New clusters will track their children's leaf names; i.e. each cluster knows what part of the original data it contains
+        cluster.appendLeafNames(lCluster.getLeafNames());
+        cluster.appendLeafNames(rCluster.getLeafNames());
         cluster.addChild(lCluster);
         cluster.addChild(rCluster);
         lCluster.setParent(cluster);
