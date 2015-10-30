@@ -70,6 +70,7 @@ public class DistanceMap {
             return false;
         }
         remove.removed = true;
+        data.remove(remove);
         return true;
     }
 
@@ -93,7 +94,11 @@ public class DistanceMap {
      */
     public Double minDist()
     {
-        return data.peek().pair.getLinkageDistance();
+        Item peek = data.peek();
+        if(peek!=null)
+            return peek.pair.getLinkageDistance();
+        else
+            return null;
     }
 
     /**

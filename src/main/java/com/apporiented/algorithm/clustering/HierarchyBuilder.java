@@ -46,9 +46,15 @@ public class HierarchyBuilder {
      */
     public List<Cluster> flatAgg(LinkageStrategy linkageStrategy, Double threshold)
     {
-        while(!isTreeComplete() && distances.minDist() != null && distances.minDist() <= threshold)
+        while((!isTreeComplete()) && (distances.minDist() != null) && (distances.minDist() <= threshold))
+        {
+            //System.out.println("Cluster Distances: " + distances.toString());
+            //System.out.println("Cluster Size: " + clusters.size());
             agglomerate(linkageStrategy);
+        }
 
+        //System.out.println("Final MinDistance: " + distances.minDist());
+        //System.out.println("Tree complete: " + isTreeComplete());
         return clusters;
     }
 
