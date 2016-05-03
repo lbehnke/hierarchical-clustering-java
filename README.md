@@ -36,7 +36,7 @@ Alternatively, you can pass a [pdist](http://www.mathworks.com/help/stats/pdist.
 What you get out
 ----------------
 
-The algorithm creates a *Cluster* instance representing an hierachy of clusters based on their distances.
+The algorithm creates a *Cluster* instance representing an hierachy of cluster nodes based on their distances.
 You may want to visualize the result using the Swing component *DendrogramPanel*:
 
     DendrogramPanel dp = new DendrogramPanel();
