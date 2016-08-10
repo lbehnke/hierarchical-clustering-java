@@ -70,6 +70,7 @@ public class DistanceMap {
             return false;
         }
         remove.removed = true;
+        data.remove(remove);
         return true;
     }
 
@@ -87,6 +88,18 @@ public class DistanceMap {
         }
     }
 
+    /**
+     * Peak into the minimum distance
+     * @return
+     */
+    public Double minDist()
+    {
+        Item peek = data.peek();
+        if(peek!=null)
+            return peek.pair.getLinkageDistance();
+        else
+            return null;
+    }
 
     /**
      * Compute some kind of unique ID for a given cluster pair.
