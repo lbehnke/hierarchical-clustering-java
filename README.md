@@ -2,7 +2,6 @@ hierarchical-clustering-java
 ============================
 
 Implementation of an agglomerative hierarchical clustering algorithm in Java. Different linkage approaches are supported:
-* Average Linkage
 * Single Linkage
 * Complete Linkage
 
@@ -31,7 +30,7 @@ Alternatively, you can pass a [pdist](http://www.mathworks.com/help/stats/pdist.
 				{1, 9, 7, 11 ,14 ,4 ,3 ,8 ,10 ,9 ,2 ,8 ,6 ,13 ,10}
 		};
     ClusteringAlgorithm alg = new PDistClusteringAlgorithm();
-    Cluster cluster = alg.performClustering(pdist, names, new AverageLinkageStrategy());
+    Cluster cluster = alg.performClustering(pdist, names, new MinimumLinkageStrategy());
 
 What you get out
 ----------------
@@ -43,10 +42,6 @@ You may want to visualize the result using the Swing component *DendrogramPanel*
     dp.setModel(cluster);
 
 When embedded into a JFrame the dendrogram panel should display this:
-
-![Screenshot](https://raw.github.com/lbehnke/hierarchical-clustering-java/master/etc/screenshot1.png "Average linkage")
-
-Same data but different linkage strategy (MinimumLinkageStrategy) result in a slightly different diagram:
 
 ![Screenshot](https://raw.github.com/lbehnke/hierarchical-clustering-java/master/etc/screenshot2.png "Minimum linkage")
 
