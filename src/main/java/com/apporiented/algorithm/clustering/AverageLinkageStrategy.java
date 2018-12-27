@@ -18,6 +18,7 @@ package com.apporiented.algorithm.clustering;
 
 import java.util.Collection;
 
+// TODO Not working correctly, fix
 public class AverageLinkageStrategy implements LinkageStrategy {
 
 	@Override
