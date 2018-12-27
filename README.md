@@ -2,7 +2,6 @@ hierarchical-clustering-java
 ============================
 
 Implementation of an agglomerative hierarchical clustering algorithm in Java. Different linkage approaches are supported:
-* Average Linkage
 * Single Linkage
 * Complete Linkage
 
