@@ -39,7 +39,7 @@ public class DistanceMap {
     }
 
     public List<ClusterPair> list() {
-        List<ClusterPair> l = new ArrayList<ClusterPair>();
+        List<ClusterPair> l = new ArrayList<ClusterPair>(data.size());
         for (Item clusterPair : data) {
             l.add(clusterPair.pair);
         }
@@ -96,7 +96,7 @@ public class DistanceMap {
     public Double minDist()
     {
         Item peek = data.peek();
-        if (peek!=null)
+        if (peek != null)
             return peek.pair.getLinkageDistance();
         else
             return null;

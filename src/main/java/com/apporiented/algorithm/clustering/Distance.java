@@ -59,8 +59,8 @@ public class Distance implements Comparable<Distance>, Cloneable {
         return distance == null ? 1 : getDistance().compareTo(distance.getDistance());
     }
 
-	@Override
-	public String toString() {
+    @Override
+    public String toString() {
 		return String.format("distance : %.2f, weight : %.2f", distance, weight);
 	}
 }

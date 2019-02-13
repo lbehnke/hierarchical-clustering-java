@@ -199,14 +199,14 @@ public class Cluster
     
     public String toNewickString(int indent)
     {
-    	String cdtString = "";
+        String cdtString = "";
         if(!isLeaf()) cdtString+="(";
-    	
-    	for (int i = 0; i < indent; i++) cdtString+=" ";
+
+        for (int i = 0; i < indent; i++) cdtString+=" ";
         
         
         if(isLeaf()) {
-        	cdtString+=getName();
+            cdtString+=getName();
         }
         
         List<Cluster> children = getChildren();
@@ -214,16 +214,17 @@ public class Cluster
         boolean firstChild = true;
         for (Cluster child : children)
         {
-        	cdtString+=child.toNewickString(indent);
-        	String distanceString = distance.getDistance().toString().replace(",", ".");
-        	String weightString = distance.getWeight().toString().replace(",", ".");
+            cdtString+=child.toNewickString(indent);
+            String distanceString = distance.getDistance().toString().replace(",", ".");
+            String weightString = distance.getWeight().toString().replace(",", ".");
             if(firstChild) cdtString+=":"+distanceString+",";
             else cdtString+=":"+weightString;
             
             firstChild=false;
         }
         
-        for (int i = 0; i < indent; i++) cdtString+=" ";
+        for (int i = 0; i < indent; i++)
+            cdtString += " ";
         
         if(!isLeaf()) cdtString+=")";
         

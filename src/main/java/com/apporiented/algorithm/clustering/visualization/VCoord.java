@@ -17,34 +17,26 @@
 package com.apporiented.algorithm.clustering.visualization;
 
 /** 
- * Virtual coordinates.
+ * Immutable Virtual coordinate.
  */
 public class VCoord {
 
-    private double x = Double.NaN;
-    private double y = Double.NaN;
+    private double x;
+    private double y;
     
     public VCoord(double x, double y) {
         this.x = x;
         this.y = y;
     }
-    
+
     public double getX() {
         return x;
-    }
-
-    public void setX(double x) {
-        this.x = x;
     }
 
     public double getY() {
         return y;
     }
 
-    public void setY(double y) {
-        this.y = y;
-    }
-    
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof VCoord) {

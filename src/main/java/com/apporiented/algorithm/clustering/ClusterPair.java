@@ -22,18 +22,18 @@ public class ClusterPair implements Comparable<ClusterPair> {
 
     private Cluster lCluster;
     private Cluster rCluster;
-	private Double linkageDistance;
+    private Double linkageDistance;
 
     public ClusterPair(){
     }
 
     public ClusterPair(Cluster left, Cluster right, Double distance) {
-        lCluster=left;
-        rCluster=right;
-        linkageDistance=distance;
+        lCluster = left;
+        rCluster = right;
+        linkageDistance = distance;
     }
 
-  public Cluster getOtherCluster(Cluster c) {
+    public Cluster getOtherCluster(Cluster c) {
     return lCluster == c ? rCluster : lCluster;
   }
 

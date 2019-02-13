@@ -16,10 +16,7 @@
 
 package com.apporiented.algorithm.clustering;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class DefaultClusteringAlgorithm implements ClusteringAlgorithm
 {
@@ -94,11 +91,11 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm
             throw new IllegalArgumentException("Invalid weights array");
         }
 
-    /* Setup model */
+        /* Setup model */
         List<Cluster> clusters = createClusters(clusterNames, weights);
         DistanceMap linkages = createLinkages(distances, clusters);
 
-    /* Process */
+        /* Process */
         HierarchyBuilder builder = new HierarchyBuilder(clusters, linkages);
         while (!builder.isTreeComplete())
         {
