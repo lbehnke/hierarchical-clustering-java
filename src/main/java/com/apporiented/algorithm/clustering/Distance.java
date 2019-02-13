@@ -19,7 +19,7 @@ package com.apporiented.algorithm.clustering;
 public class Distance implements Comparable<Distance>, Cloneable {
 
     private Double distance;
-	private Double weight;
+    private Double weight;
 
     public Distance() {
 		this(0.0);

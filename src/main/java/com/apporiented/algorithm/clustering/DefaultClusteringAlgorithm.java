@@ -30,11 +30,11 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm
     {
 
         checkArguments(distances, clusterNames, linkageStrategy);
-    /* Setup model */
+        /* Setup model */
         List<Cluster> clusters = createClusters(clusterNames);
         DistanceMap linkages = createLinkages(distances, clusters);
 
-    /* Process */
+        /* Process */
         HierarchyBuilder builder = new HierarchyBuilder(clusters, linkages);
         while (!builder.isTreeComplete())
         {
@@ -50,11 +50,11 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm
     {
 
         checkArguments(distances, clusterNames, linkageStrategy);
-    /* Setup model */
+        /* Setup model */
         List<Cluster> clusters = createClusters(clusterNames);
         DistanceMap linkages = createLinkages(distances, clusters);
 
-    /* Process */
+        /* Process */
         HierarchyBuilder builder = new HierarchyBuilder(clusters, linkages);
         return builder.flatAgg(linkageStrategy, threshold);
     }
