@@ -17,7 +17,6 @@
 package com.apporiented.algorithm.clustering.visualization;
 
 import java.awt.BasicStroke;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -26,16 +25,14 @@ import java.awt.geom.Rectangle2D;
 
 import javax.swing.*;
 
-import com.apporiented.algorithm.clustering.AverageLinkageStrategy;
 import com.apporiented.algorithm.clustering.Cluster;
-import com.apporiented.algorithm.clustering.ClusteringAlgorithm;
-import com.apporiented.algorithm.clustering.DefaultClusteringAlgorithm;
 
 public class DendrogramPanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
 
-    final static BasicStroke solidStroke = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
+    private final static BasicStroke SOLID_STROKE =
+            new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
 
     private Cluster model;
     private ClusterComponent component;
@@ -179,8 +176,9 @@ public class DendrogramPanel extends JPanel {
                 int childLeafCount = child.countLeafs();
                 double childHeight = childLeafCount * leafHeight;
                 double childDistance = child.getDistanceValue() == null ? 0 : child.getDistanceValue();
-                VCoord childInitCoord = new VCoord(initCoord.getX() + (distance - childDistance), yChild + childHeight
-                        / 2.0);
+                VCoord childInitCoord = new VCoord(
+                        initCoord.getX() + (distance - childDistance),
+                        yChild + childHeight / 2.0);
                 yChild += childHeight;
 
                 /* Traverse cluster node tree */
@@ -210,7 +208,7 @@ public class DendrogramPanel extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setColor(lineColor);
-        g2.setStroke(solidStroke);
+        g2.setStroke(SOLID_STROKE);
 
         int wDisplay = getWidth() - borderLeft - borderRight;
         int hDisplay = getHeight() - borderTop - borderBottom;
@@ -277,39 +275,4 @@ public class DendrogramPanel extends JPanel {
             g2.drawString(str, xt, yt);
         }
     }
-
-    public static void main(String[] args) {
-        JFrame frame = new JFrame();
-        frame.setSize(400, 300);
-        frame.setLocation(400, 300);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-        JPanel content = new JPanel();
-        DendrogramPanel dp = new DendrogramPanel();
-
-        frame.setContentPane(content);
-        content.setBackground(Color.red);
-        content.setLayout(new BorderLayout());
-        content.add(dp, BorderLayout.CENTER);
-        dp.setBackground(Color.WHITE);
-        dp.setLineColor(Color.BLACK);
-        dp.setScaleValueDecimals(0);
-        dp.setScaleValueInterval(1);
-        dp.setShowDistances(false);
-
-        Cluster cluster = createSampleCluster();
-        dp.setModel(cluster);
-        frame.setVisible(true);
-    }
-
-    private static Cluster createSampleCluster() {
-        double[][] distances = new double[][] { { 0, 1, 9, 7, 11, 14 }, { 1, 0, 4, 3, 8, 10 }, { 9, 4, 0, 9, 2, 8 },
-                { 7, 3, 9, 0, 6, 13 }, { 11, 8, 2, 6, 0, 10 }, { 14, 10, 8, 13, 10, 0 } };
-        String[] names = new String[] { "O1", "O2", "O3", "O4", "O5", "O6" };
-        ClusteringAlgorithm alg = new DefaultClusteringAlgorithm();
-        Cluster cluster = alg.performClustering(distances, names, new AverageLinkageStrategy());
-        cluster.toConsole(0);
-        return cluster;
-    }
-
 }
