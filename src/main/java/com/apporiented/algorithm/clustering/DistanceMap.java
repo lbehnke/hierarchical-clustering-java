@@ -70,7 +70,7 @@ public class DistanceMap {
             return false;
         }
         remove.removed = true;
-        data.remove(remove);
+        // data.remove(remove);  // bottleneck
         return true;
     }
 
