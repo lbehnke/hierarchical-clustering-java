@@ -16,62 +16,68 @@
 
 package com.apporiented.algorithm.clustering;
 
-public class ClusterPair implements Comparable<ClusterPair> {
+import java.util.function.Function;
+
+public class ClusterPair<T> implements Comparable<ClusterPair<T>> {
 
     private static long globalIndex = 0;
 
-    private Cluster lCluster;
-    private Cluster rCluster;
-	private Double linkageDistance;
+    private Cluster<T> lCluster;
+    private Cluster<T> rCluster;
+    private Double linkageDistance;
+
+    private Function<T, String> toStringFunction;
 
     public ClusterPair(){
     }
 
-	public ClusterPair(Cluster left, Cluster right, Double distance) {
-        lCluster=left;
-        rCluster=right;
-        linkageDistance=distance;
+
+    public ClusterPair(Cluster<T> left, Cluster<T> right, Double distance, Function<T, String> toStringFunction) {
+        lCluster = left;
+        rCluster = right;
+        linkageDistance = distance;
+        this.toStringFunction = toStringFunction;
     }
 
-  public Cluster getOtherCluster(Cluster c) {
-    return lCluster == c ? rCluster : lCluster;
-  }
+    public Cluster<T> getOtherCluster(Cluster<T> c) {
+        return lCluster == c ? rCluster : lCluster;
+    }
 
-    public Cluster getlCluster() {
+    public Cluster<T> getlCluster() {
         return lCluster;
     }
 
-    public void setlCluster(Cluster lCluster) {
+    public void setlCluster(Cluster<T> lCluster) {
         this.lCluster = lCluster;
     }
 
-    public Cluster getrCluster() {
+    public Cluster<T> getrCluster() {
         return rCluster;
     }
 
-    public void setrCluster(Cluster rCluster) {
+    public void setrCluster(Cluster<T> rCluster) {
         this.rCluster = rCluster;
     }
 
-	public Double getLinkageDistance() {
+    public Double getLinkageDistance() {
         return linkageDistance;
     }
 
-	public void setLinkageDistance(Double distance) {
+    public void setLinkageDistance(Double distance) {
         this.linkageDistance = distance;
     }
 
     /**
      * @return a new ClusterPair with the two left/right inverted
      */
-    public ClusterPair reverse() {
-        return new ClusterPair(getrCluster(), getlCluster(), getLinkageDistance());
+    public ClusterPair<T> reverse() {
+        return new ClusterPair<T>(getrCluster(), getlCluster(), getLinkageDistance(),toStringFunction);
     }
 
 
 
     @Override
-    public int compareTo(ClusterPair o) {
+    public int compareTo(ClusterPair<T> o) {
         int result;
         if (o == null || o.getLinkageDistance() == null) {
             result = -1;
@@ -85,25 +91,29 @@ public class ClusterPair implements Comparable<ClusterPair> {
     }
 
 
-    public Cluster agglomerate(String name) {
-        if (name == null) {
-            name = "clstr#" + (++globalIndex);
+    public Cluster<T> agglomerate(T name) {
+        NodeCluster<T> cluster = new NodeCluster<>("clstr#" + (++globalIndex));
+//            ;
+//        if (name == null) {
+//            cluster = new NodeCluster("clstr#" + (++globalIndex));
+//
+//            /*
+//            StringBuilder sb = new StringBuilder();
+//            if (lCluster != null) {
+//                sb.append(lCluster.getName());
+//            }
+//            if (rCluster != null) {
+//                if (sb.length() > 0) {
+//                    sb.append("&");
+//                }
+//                sb.append(rCluster.getName());
+//            }
+//            name = sb.toString();
+//            */
+//        } else {
+//            cluster = new Cluster<>(name,toStringFunction);
+//        }
 
-            /*
-            StringBuilder sb = new StringBuilder();
-            if (lCluster != null) {
-                sb.append(lCluster.getName());
-            }
-            if (rCluster != null) {
-                if (sb.length() > 0) {
-                    sb.append("&");
-                }
-                sb.append(rCluster.getName());
-            }
-            name = sb.toString();
-            */
-        }
-        Cluster cluster = new Cluster(name);
         cluster.setDistance(new Distance(getLinkageDistance()));
         //New clusters will track their children's leaf names; i.e. each cluster knows what part of the original data it contains
         cluster.appendLeafNames(lCluster.getLeafNames());
@@ -115,8 +125,10 @@ public class ClusterPair implements Comparable<ClusterPair> {
 
         Double lWeight = lCluster.getWeightValue();
         Double rWeight = rCluster.getWeightValue();
-		double weight = lWeight + rWeight;
-        cluster.getDistance().setWeight(weight);
+        double weight = lWeight + rWeight;
+        cluster
+            .getDistance()
+            .setWeight(weight);
 
         return cluster;
     }
@@ -125,15 +137,17 @@ public class ClusterPair implements Comparable<ClusterPair> {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         if (lCluster != null) {
-            sb.append(lCluster.getName());
+            sb.append(lCluster.getClusterAsString());
         }
         if (rCluster != null) {
             if (sb.length() > 0) {
                 sb.append(" + ");
             }
-            sb.append(rCluster.getName());
+            sb.append(rCluster.getClusterAsString());
         }
-        sb.append(" : ").append(linkageDistance);
+        sb
+            .append(" : ")
+            .append(linkageDistance);
         return sb.toString();
     }
 

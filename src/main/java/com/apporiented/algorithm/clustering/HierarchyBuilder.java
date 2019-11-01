@@ -20,34 +20,33 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class HierarchyBuilder {
+public class HierarchyBuilder<T> {
 
     private DistanceMap distances;
-    private List<Cluster> clusters;
+    private List<Cluster<T>> clusters;
+
+    public HierarchyBuilder(List<Cluster<T>> clusters, DistanceMap distances) {
+        this.clusters = clusters;
+        this.distances = distances;
+    }
 
     public DistanceMap getDistances() {
         return distances;
     }
 
-    public List<Cluster> getClusters() {
+    public List<Cluster<T>> getClusters() {
         return clusters;
-    }
-
-    public HierarchyBuilder(List<Cluster> clusters, DistanceMap distances) {
-        this.clusters = clusters;
-        this.distances = distances;
     }
 
     /**
      * Returns Flattened clusters, i.e. clusters that are at least apart by a given threshold
+     *
      * @param linkageStrategy
      * @param threshold
      * @return
      */
-    public List<Cluster> flatAgg(LinkageStrategy linkageStrategy, Double threshold)
-    {
-        while((!isTreeComplete()) && (distances.minDist() != null) && (distances.minDist() <= threshold))
-        {
+    public List<Cluster<T>> flatAgg(LinkageStrategy linkageStrategy, Double threshold) {
+        while ((!isTreeComplete()) && (distances.minDist() != null) && (distances.minDist() <= threshold)) {
             //System.out.println("Cluster Distances: " + distances.toString());
             //System.out.println("Cluster Size: " + clusters.size());
             agglomerate(linkageStrategy);
@@ -64,34 +63,38 @@ public class HierarchyBuilder {
             clusters.remove(minDistLink.getrCluster());
             clusters.remove(minDistLink.getlCluster());
 
-            Cluster oldClusterL = minDistLink.getlCluster();
-            Cluster oldClusterR = minDistLink.getrCluster();
-            Cluster newCluster = minDistLink.agglomerate(null);
+            Cluster<T> oldClusterL = minDistLink.getlCluster();
+            Cluster<T> oldClusterR = minDistLink.getrCluster();
+            Cluster<T> newCluster = minDistLink.agglomerate(null);
 
-            for (Cluster iClust : clusters) {
+            for (Cluster<T> iClust : clusters) {
                 ClusterPair link1 = findByClusters(iClust, oldClusterL);
                 ClusterPair link2 = findByClusters(iClust, oldClusterR);
-                ClusterPair newLinkage = new ClusterPair();
+                ClusterPair<T> newLinkage = new ClusterPair<T>();
                 newLinkage.setlCluster(iClust);
                 newLinkage.setrCluster(newCluster);
                 Collection<Distance> distanceValues = new ArrayList<Distance>();
 
                 if (link1 != null) {
-					Double distVal = link1.getLinkageDistance();
-                    Double weightVal = link1.getOtherCluster(iClust).getWeightValue();
+                    Double distVal = link1.getLinkageDistance();
+                    Double weightVal = link1
+                        .getOtherCluster(iClust)
+                        .getWeightValue();
                     distanceValues.add(new Distance(distVal, weightVal));
                     distances.remove(link1);
                 }
                 if (link2 != null) {
-					Double distVal = link2.getLinkageDistance();
-					Double weightVal = link2.getOtherCluster(iClust).getWeightValue();
+                    Double distVal = link2.getLinkageDistance();
+                    Double weightVal = link2
+                        .getOtherCluster(iClust)
+                        .getWeightValue();
                     distanceValues.add(new Distance(distVal, weightVal));
                     distances.remove(link2);
                 }
 
                 Distance newDistance = linkageStrategy.calculateDistance(distanceValues);
 
-				newLinkage.setLinkageDistance(newDistance.getDistance());
+                newLinkage.setLinkageDistance(newDistance.getDistance());
                 distances.add(newLinkage);
 
             }
@@ -99,7 +102,7 @@ public class HierarchyBuilder {
         }
     }
 
-    private ClusterPair findByClusters(Cluster c1, Cluster c2) {
+    private ClusterPair findByClusters(Cluster<T> c1, Cluster<T> c2) {
         return distances.findByCodePair(c1, c2);
     }
 
@@ -107,7 +110,7 @@ public class HierarchyBuilder {
         return clusters.size() == 1;
     }
 
-    public Cluster getRootCluster() {
+    public Cluster<T> getRootCluster() {
         if (!isTreeComplete()) {
             throw new RuntimeException("No root available");
         }

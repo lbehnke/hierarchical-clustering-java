@@ -20,6 +20,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.function.Function;
+
 public class DefaultClusteringAlgorithmTest {
 
 	private double[][] distances;
@@ -33,17 +35,17 @@ public class DefaultClusteringAlgorithmTest {
 
 	@Test
 	public void testClusteringAvgLink() {
-		ClusteringAlgorithm alg = new DefaultClusteringAlgorithm();
-		Cluster c = alg.performClustering(distances, names, new AverageLinkageStrategy());
+		ClusteringAlgorithm<String> alg = new DefaultClusteringAlgorithm<>((Function<String, String>) s -> s);
+		Cluster<String> c = alg.performClustering(distances, names, new AverageLinkageStrategy());
 		Assert.assertNotNull(c);
 	}
 
 	@Test
 	public void testDuplicateNames() {
-		ClusteringAlgorithm alg = new DefaultClusteringAlgorithm();
+		ClusteringAlgorithm<String> alg = new DefaultClusteringAlgorithm<>((Function<String, String>) s -> s);
 		try {
-			Cluster c = alg.performClustering(distances, SampleClusterData.NAMES_WITH_DUPLICATE,
-					new AverageLinkageStrategy());
+			Cluster<String> c = alg.performClustering(distances, SampleClusterData.NAMES_WITH_DUPLICATE,
+																								new AverageLinkageStrategy());
 			Assert.fail("Exception expected");
 		} catch (IllegalArgumentException e) {
 			Assert.assertEquals("Duplicate names", e.getMessage());

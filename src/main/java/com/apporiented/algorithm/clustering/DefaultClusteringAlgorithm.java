@@ -20,18 +20,31 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.function.Function;
 
-public class DefaultClusteringAlgorithm implements ClusteringAlgorithm
+public class DefaultClusteringAlgorithm<T> implements ClusteringAlgorithm<T>
 {
 
+    private Function<T, String> toStringFunction;
+
+    public DefaultClusteringAlgorithm(Function<T, String> toStringFunction) {
+
+        this.toStringFunction = toStringFunction;
+    }
+
     @Override
-    public Cluster performClustering(double[][] distances,
-                                     String[] clusterNames, LinkageStrategy linkageStrategy)
+    public Function<T, String> getToStringFunction() {
+        return toStringFunction;
+    }
+
+    @Override
+    public Cluster<T> performClustering(double[][] distances,
+                                        T[] clusterNames, LinkageStrategy linkageStrategy)
     {
 
         checkArguments(distances, clusterNames, linkageStrategy);
     /* Setup model */
-        List<Cluster> clusters = createClusters(clusterNames);
+        List<Cluster<T>> clusters = createClusters(clusterNames);
         DistanceMap linkages = createLinkages(distances, clusters);
 
     /* Process */
@@ -45,13 +58,13 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm
     }
 
     @Override
-    public List<Cluster> performFlatClustering(double[][] distances,
-                                               String[] clusterNames, LinkageStrategy linkageStrategy, Double threshold)
+    public List<LeafCluster<T>> performFlatClustering(double[][] distances,
+                                                      T[] clusterNames, LinkageStrategy linkageStrategy, Double threshold)
     {
 
         checkArguments(distances, clusterNames, linkageStrategy);
     /* Setup model */
-        List<Cluster> clusters = createClusters(clusterNames);
+        List<Cluster<T>> clusters = createClusters(clusterNames);
         DistanceMap linkages = createLinkages(distances, clusters);
 
     /* Process */
@@ -59,7 +72,7 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm
         return builder.flatAgg(linkageStrategy, threshold);
     }
 
-    private void checkArguments(double[][] distances, String[] clusterNames,
+    private void checkArguments(double[][] distances, T[] clusterNames,
                                 LinkageStrategy linkageStrategy)
     {
         if (distances == null || distances.length == 0
@@ -75,7 +88,7 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm
         {
             throw new IllegalArgumentException("Undefined linkage strategy");
         }
-        int uniqueCount = new HashSet<String>(Arrays.asList(clusterNames)).size();
+        int uniqueCount = new HashSet<Object>(Arrays.asList(clusterNames)).size();
         if (uniqueCount != clusterNames.length)
         {
             throw new IllegalArgumentException("Duplicate names");
@@ -83,8 +96,8 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm
     }
 
     @Override
-    public Cluster performWeightedClustering(double[][] distances, String[] clusterNames,
-                                             double[] weights, LinkageStrategy linkageStrategy)
+    public Cluster<T> performWeightedClustering(double[][] distances, T[] clusterNames,
+                                                double[] weights, LinkageStrategy linkageStrategy)
     {
 
         checkArguments(distances, clusterNames, linkageStrategy);
@@ -95,7 +108,7 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm
         }
 
     /* Setup model */
-        List<Cluster> clusters = createClusters(clusterNames, weights);
+        List<Cluster<T>> clusters = createClusters(clusterNames, weights);
         DistanceMap linkages = createLinkages(distances, clusters);
 
     /* Process */
@@ -109,16 +122,16 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm
     }
 
     private DistanceMap createLinkages(double[][] distances,
-                                       List<Cluster> clusters)
+                                       List<Cluster<T>> clusters)
     {
         DistanceMap linkages = new DistanceMap();
         for (int col = 0; col < clusters.size(); col++)
         {
             for (int row = col + 1; row < clusters.size(); row++)
             {
-                ClusterPair link = new ClusterPair();
-                Cluster lCluster = clusters.get(col);
-                Cluster rCluster = clusters.get(row);
+                ClusterPair<T> link = new ClusterPair();
+                Cluster<T> lCluster = clusters.get(col);
+                Cluster<T> rCluster = clusters.get(row);
                 link.setLinkageDistance(distances[col][row]);
                 link.setlCluster(lCluster);
                 link.setrCluster(rCluster);
@@ -128,23 +141,23 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm
         return linkages;
     }
 
-    private List<Cluster> createClusters(String[] clusterNames)
+    private List<Cluster<T>> createClusters(T[] clusterNames)
     {
-        List<Cluster> clusters = new ArrayList<Cluster>();
-        for (String clusterName : clusterNames)
+        List<Cluster<T>> clusters = new ArrayList<>();
+        for (T clusterName : clusterNames)
         {
-            Cluster cluster = new Cluster(clusterName);
+            LeafCluster<T> cluster = new LeafCluster<T>(clusterName, toStringFunction);
             clusters.add(cluster);
         }
         return clusters;
     }
 
-    private List<Cluster> createClusters(String[] clusterNames, double[] weights)
+    private List<Cluster<T>> createClusters(T[] clusterNames, double[] weights)
     {
-        List<Cluster> clusters = new ArrayList<Cluster>();
+        List<Cluster<T>> clusters = new ArrayList<>();
         for (int i = 0; i < weights.length; i++)
         {
-            Cluster cluster = new Cluster(clusterNames[i]);
+            LeafCluster<T> cluster = new LeafCluster<T>(clusterNames[i], toStringFunction);
             cluster.setDistance(new Distance(0.0, weights[i]));
             clusters.add(cluster);
         }

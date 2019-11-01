@@ -19,6 +19,8 @@ package com.apporiented.algorithm.clustering;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.function.Function;
+
 public class WeightedClusteringAlgorithmTest {
 	public static final double[][] DISTANCES = new double[][] { // A--B-C--D
 	{ 0, 2, 3, 5 }, { 2, 0, 1, 3 }, { 3, 1, 0, 2 }, { 5, 3, 2, 0 } };
@@ -28,10 +30,10 @@ public class WeightedClusteringAlgorithmTest {
 
 	@Test
 	public void testClusteringAvgLink() {
-		ClusteringAlgorithm alg = new DefaultClusteringAlgorithm();
-		Cluster ca = alg.performWeightedClustering(DISTANCES, NAMES, WEIGHTSA, new WeightedLinkageStrategy());
-		Assert.assertEquals("D", ca.getChildren().get(0).getName());
-		Cluster cd = alg.performWeightedClustering(DISTANCES, NAMES, WEIGHTSD, new WeightedLinkageStrategy());
-		Assert.assertEquals("A", cd.getChildren().get(0).getName());
+		ClusteringAlgorithm<String> alg = new DefaultClusteringAlgorithm<String>((Function<String, String>) s -> s);
+		Cluster<String> ca = alg.performWeightedClustering(DISTANCES, NAMES, WEIGHTSA, new WeightedLinkageStrategy());
+		Assert.assertEquals("D", ca.getChildren().get(0).getClusterAsString());
+		Cluster<String> cd = alg.performWeightedClustering(DISTANCES, NAMES, WEIGHTSD, new WeightedLinkageStrategy());
+		Assert.assertEquals("A", cd.getChildren().get(0).getClusterAsString());
 	}
 }

@@ -17,16 +17,19 @@
 package com.apporiented.algorithm.clustering;
 
 import java.util.List;
+import java.util.function.Function;
 
-public interface ClusteringAlgorithm
+public interface ClusteringAlgorithm<T>
 {
 
-    public Cluster performClustering(double[][] distances, String[] clusterNames,
-                                     LinkageStrategy linkageStrategy);
+    Function<T, String> getToStringFunction();
 
-    public Cluster performWeightedClustering(double[][] distances, String[] clusterNames,
-                                             double[] weights, LinkageStrategy linkageStrategy);
+    public Cluster<T> performClustering(double[][] distances, T[] clusterNames,
+                                        LinkageStrategy linkageStrategy);
 
-    public List<Cluster> performFlatClustering(double[][] distances,
-                                               String[] clusterNames, LinkageStrategy linkageStrategy, Double threshold);
+    public Cluster<T> performWeightedClustering(double[][] distances, T[] clusterNames,
+                                                double[] weights, LinkageStrategy linkageStrategy);
+
+    public List<LeafCluster<T>> performFlatClustering(double[][] distances,
+                                                      T[] clusterNames, LinkageStrategy linkageStrategy, Double threshold);
 }

@@ -2,13 +2,15 @@ package com.apporiented.algorithm.clustering;
 
 import org.junit.Test;
 
+import java.util.function.Function;
+
 import static org.junit.Assert.*;
 
 public class DistanceMapTest {
     DistanceMap map = new DistanceMap();
-	ClusterPair ab = new ClusterPair(new Cluster("a"), new Cluster("b"), 1.0);
-	ClusterPair bc = new ClusterPair(new Cluster("b"), new Cluster("c"), 2.0);
-	ClusterPair ca = new ClusterPair(new Cluster("c"), new Cluster("a"), 3.0);
+	ClusterPair<String> ab = new ClusterPair<String>(new LeafCluster<String>("a", (Function<String, String>) s -> s), new LeafCluster<String>("b", (Function<String, String>) s -> s), 1.0, (Function<String, String>) s -> s);
+	ClusterPair<String> bc = new ClusterPair<String>(new LeafCluster<String>("b", (Function<String, String>) s -> s), new LeafCluster<String>("c", (Function<String, String>) s -> s), 2.0, (Function<String, String>) s -> s);
+	ClusterPair<String> ca = new ClusterPair<String>(new LeafCluster<String>("c", (Function<String, String>) s -> s), new LeafCluster<String>("a", (Function<String, String>) s -> s), 3.0, (Function<String, String>) s -> s);
 
     @Test
     public void testMapWorksWithSameDistance() throws Exception {
