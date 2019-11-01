@@ -1,5 +1,6 @@
 package com.apporiented.algorithm.clustering;
 
+import com.google.common.collect.Lists;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -92,5 +93,41 @@ public class ListTest {
         assertArrayEquals(collect.get(5),new String[]{"WILHELMSEN","FUJAIRAH"});
         assertArrayEquals(collect.get(6),new String[]{"WILHELMSEN"});
     }
+
+    @Test
+    public void test(){
+        List<List<String>> namesAsTokens = Stream.of(names)
+            .map(name -> Lists.newArrayList(name.split(" ")))
+                                                 .map(list->new ArrayList<String>(list){
+                                                     @SuppressWarnings("unchecked")
+                                                     @Override
+                                                     public int hashCode() {
+                                                         return System.identityHashCode(this);
+                                                     }
+                                                 })
+            .collect(Collectors.toList());
+
+        ClusteringAlgorithm<List<String>> alg = new DefaultClusteringAlgorithm<>(strings -> strings.stream().collect(Collectors.joining(" "))+System.identityHashCode(strings));
+        @SuppressWarnings("unchecked") Cluster<List<String>> cluster = alg.performClustering(distance, namesAsTokens.toArray(new List[0]), new WeightedLinkageStrategy());
+
+        List<List<String>> collect = cluster
+            .streamChildren()
+            .filter(c -> c.isLeaf())
+            .map(c -> (List<String>) c.getPayload())
+            .collect(Collectors.toList());
+
+
+        assertEquals(collect.get(0),Lists.newArrayList("FUJAIRAH"));
+        assertEquals(collect.get(1),Lists.newArrayList("SREEKUMAR","VARIER"));
+        assertEquals(collect.get(2),Lists.newArrayList("SREEKUMAR","VARIER"));
+        assertEquals(collect.get(3),Lists.newArrayList("WILHELMSE"));
+        assertEquals(collect.get(4),Lists.newArrayList("WILHELMSEN","FUJAIRAH"));
+        assertEquals(collect.get(5),Lists.newArrayList("WILHELMSEN","FUJAIRAH"));
+        assertEquals(collect.get(6),Lists.newArrayList("WILHELMSEN"));
+
+
+    }
+
+
 
 }

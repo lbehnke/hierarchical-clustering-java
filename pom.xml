@@ -164,6 +164,14 @@
             <version>2.5</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <type>jar</type>
+            <version>27.0.1-jre</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <!-- Deployment into sonatype nexus repository -->
