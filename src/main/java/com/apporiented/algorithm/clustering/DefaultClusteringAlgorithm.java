@@ -21,6 +21,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class DefaultClusteringAlgorithm<T> implements ClusteringAlgorithm<T>
 {
@@ -88,7 +90,7 @@ public class DefaultClusteringAlgorithm<T> implements ClusteringAlgorithm<T>
         {
             throw new IllegalArgumentException("Undefined linkage strategy");
         }
-        int uniqueCount = new HashSet<Object>(Arrays.asList(clusterNames)).size();
+        int uniqueCount = Stream.of(clusterNames).map(c->toStringFunction.apply(c)).collect(Collectors.toSet()).size();
         if (uniqueCount != clusterNames.length)
         {
             throw new IllegalArgumentException("Duplicate names");
