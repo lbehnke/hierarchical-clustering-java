@@ -53,5 +53,11 @@ public interface Cluster<T> extends Iterable<Cluster<T>>{
 
     Object getPayload();
 
+    Stream<Cluster<T>> stream();
+
+    Stream<Cluster<T>> stream(double untilNodeDistanceLessThan);
+
     Stream<Cluster<T>> streamChildren();
+
+    Stream<Cluster<T>> streamChildren(double untilNodeDistanceLessThan);
 }

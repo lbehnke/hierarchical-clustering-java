@@ -6,8 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Spliterator;
 import java.util.Spliterators;
-import java.util.concurrent.SynchronousQueue;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -211,58 +209,86 @@ abstract public class AbstractCluster<T>  implements Cluster<T> {
         return getChildren().iterator();
     }
 
-    @Override
-    public Spliterator<Cluster<T>> spliterator() {
-        return Spliterators.spliterator(new Iterator<Cluster<T>>() {
-
-            LinkedList<Iterator<Cluster<T>>> queue=new LinkedList<>();
-            {
-                queue.add(getChildren().iterator());
-            }
-
-            @Override
-            public boolean hasNext() {
-                if (!queue.peek().hasNext()){
-                    queue.poll();
-                }
-                return queue.peek()!=null && queue.peek().hasNext();
-            }
-
-            @Override
-            public Cluster<T> next() {
-                if (!queue.peek().hasNext()){
-                    queue.poll();
-                }
-                final Cluster<T> next = queue
-                    .peek()
-                    .next();
-                if (next.isNode()){
-                    queue.add(next.getChildren().iterator());
-                }
-                return next;
-            }
-        }, 1,CONCURRENT);
+    Spliterator<Cluster<T>> spliterator(double untilNodeDistanceLessThan) {
+        return Spliterators.spliterator(new ClusterIterator(untilNodeDistanceLessThan), 1, CONCURRENT);
     }
 
-    /**
-     * Returns a sequential {@code Stream} with this collection as its source.
-     *
-     * <p>This method should be overridden when the {@link #spliterator()}
-     * method cannot return a spliterator that is {@code IMMUTABLE},
-     * {@code CONCURRENT}, or <em>late-binding</em>. (See {@link #spliterator()}
-     * for details.)
-     *
-     * @implSpec
-     * The default implementation creates a sequential {@code Stream} from the
-     * collection's {@code Spliterator}.
-     *
-     * @return a sequential {@code Stream} over the elements in this collection
-     * @since 1.8
-     */
+
+    Spliterator<Cluster<T>> spliteratorChildren(double untilNodeDistanceLessThan) {
+        return Spliterators.spliterator(new ClusterChildrenIterator(untilNodeDistanceLessThan), 1, CONCURRENT);
+    }
+
+    @Override
+    public Stream<Cluster<T>> stream() {
+        return StreamSupport.stream(spliterator(-Double.MAX_VALUE), false);
+    }
+
+
+    @Override
+    public Stream<Cluster<T>> stream(double untilNodeDistanceLessThan) {
+        return StreamSupport.stream(spliterator(untilNodeDistanceLessThan), false);
+    }
+
     @Override
     public Stream<Cluster<T>> streamChildren() {
-        return StreamSupport.stream(spliterator(), false);
+        return StreamSupport.stream(spliteratorChildren(-Double.MAX_VALUE), false);
     }
 
 
+    @Override
+    public Stream<Cluster<T>> streamChildren(double untilNodeDistanceLessThan) {
+        return StreamSupport.stream(spliteratorChildren(untilNodeDistanceLessThan), false);
+    }
+
+
+    private class ClusterChildrenIterator implements Iterator<Cluster<T>> {
+
+        final double untilNodeDistanceLessThan;
+        LinkedList<Iterator<Cluster<T>>> queue= new LinkedList<>();;
+
+
+        ClusterChildrenIterator(double untilNodeDistanceLessThan) {
+            this.untilNodeDistanceLessThan = untilNodeDistanceLessThan;
+            initQueue();
+        }
+
+        protected void initQueue() {
+            queue.add(getChildren().iterator());
+        }
+
+        @Override
+        public boolean hasNext() {
+            if (!queue.peek().hasNext()){
+                queue.poll();
+            }
+            return queue.peek()!=null && queue.peek().hasNext() ;
+        }
+
+        @Override
+        public Cluster<T> next() {
+            if (!queue.peek().hasNext()){
+                queue.poll();
+            }
+            final Cluster<T> next = queue
+                .peek()
+                .next();
+            if (next.isNode() && next.getDistanceValue()> untilNodeDistanceLessThan){
+                queue.add(next.getChildren().iterator());
+            }
+            return next;
+        }
+    }
+
+    private class ClusterIterator extends ClusterChildrenIterator{
+        public ClusterIterator(double untilNodeDistanceLessThan) {
+            super(untilNodeDistanceLessThan);
+        }
+        @Override
+        protected void initQueue() {
+            List<Cluster<T>> tmp=new ArrayList<>();
+            tmp.add(AbstractCluster.this);
+            queue.add(0,tmp.iterator());
+        }
+
+    }
 }
