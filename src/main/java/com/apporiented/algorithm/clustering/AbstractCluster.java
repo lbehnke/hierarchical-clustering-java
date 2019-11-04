@@ -49,6 +49,23 @@ abstract public class AbstractCluster<T>  implements Cluster<T> {
             child.toConsole(indent + 1);
         }
     }
+    @Override
+    public String toString(int indent)
+    {
+        StringBuilder sb =new StringBuilder();
+        for (int i = 0; i < indent; i++)
+        {
+            sb.append("  ");
+
+        }
+        String name = getClusterAsString() + (isLeaf() ? " (leaf)" : "") + (distance != null ? "  distance: " + distance : "");
+        sb.append(name);
+        for (Cluster<T> child : getChildren())
+        {
+            child.toString(indent + 1);
+        }
+        return sb.toString();
+    }
 
     @Override
     public String toNewickString(int indent)

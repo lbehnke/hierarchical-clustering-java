@@ -11,6 +11,8 @@ public interface Cluster<T> extends Iterable<Cluster<T>>{
 
     String getClusterAsString();
 
+    String toString(int indent);
+
     String toNewickString(int indent);
 
     double getTotalDistance();
