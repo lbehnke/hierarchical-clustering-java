@@ -68,6 +68,7 @@ public class HierarchyBuilder<T> {
             Cluster<T> newCluster = minDistLink.agglomerate(null);
 
             for (Cluster<T> iClust : clusters) {
+
                 ClusterPair link1 = findByClusters(iClust, oldClusterL);
                 ClusterPair link2 = findByClusters(iClust, oldClusterR);
                 ClusterPair<T> newLinkage = new ClusterPair<T>();

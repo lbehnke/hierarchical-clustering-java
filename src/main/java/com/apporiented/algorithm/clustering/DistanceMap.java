@@ -9,6 +9,7 @@ import java.util.*;
  */
 public class DistanceMap<T> {
 
+
     private Map<String, Item> pairHash;
     private PriorityQueue<Item> data;
 
@@ -49,7 +50,11 @@ public class DistanceMap<T> {
 
     public ClusterPair<T> findByCodePair(Cluster<T> c1, Cluster<T> c2) {
         String inCode = hashCodePair(c1, c2);
-        return pairHash.get(inCode).pair;
+        try {
+            return pairHash.get(inCode).pair;
+        } catch (Exception e) {
+            throw new RuntimeException("not found hash "+c1.getClusterAsString()+" "+c2.getClusterAsString()+" hash: "+ inCode);
+        }
     }
 
     public ClusterPair<T> removeFirst() {
@@ -66,7 +71,9 @@ public class DistanceMap<T> {
     }
 
     public boolean remove(ClusterPair<T> link) {
-        Item remove = pairHash.remove(hashCodePair(link));
+        final String hashCode = hashCodePair(link);
+//        System.err.println("removing hash "+hashCode);
+        Item remove = pairHash.remove(hashCode);
         if (remove == null) {
             return false;
         }
