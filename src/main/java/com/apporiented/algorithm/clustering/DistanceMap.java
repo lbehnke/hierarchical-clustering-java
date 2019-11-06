@@ -11,9 +11,17 @@ public class DistanceMap<T> {
 
 
     private Map<String, Item> pairHash;
-    private PriorityQueue<Item> data;
+    private TreeSet<Item> data;
+
+
+    //start here as low as possible
+    private static long nextUniqueNum =Long.MIN_VALUE;
 
     private class Item implements Comparable<Item> {
+
+        //uniquenumber, see in compareTo
+        private final long uniqueNum = nextUniqueNum++;
+
         final ClusterPair<T> pair;
         final String hash;
         boolean removed = false;
@@ -25,7 +33,12 @@ public class DistanceMap<T> {
 
         @Override
         public int compareTo(Item o) {
-            return pair.compareTo(o.pair);
+            final int compareToPair = pair.compareTo(o.pair);
+            if (compareToPair==0){
+                //treeset has to have an unique item
+                return Long.compare(uniqueNum, o.uniqueNum);
+            }
+            return compareToPair;
         }
 
         @Override
@@ -36,8 +49,8 @@ public class DistanceMap<T> {
 
 
     public DistanceMap() {
-        data = new PriorityQueue<Item>();
-        pairHash = new HashMap<String, Item>();
+        data = new TreeSet<>();
+        pairHash = new HashMap<>();
     }
 
     public List<ClusterPair<T>> list() {
@@ -58,9 +71,9 @@ public class DistanceMap<T> {
     }
 
     public ClusterPair<T> removeFirst() {
-        Item poll = data.poll();
+        Item poll = data.pollFirst();
         while (poll != null && poll.removed) {
-            poll = data.poll();
+            poll = data.pollFirst();
         }
         if (poll == null) {
             return null;
@@ -102,7 +115,7 @@ public class DistanceMap<T> {
      */
     public Double minDist()
     {
-        Item peek = data.peek();
+        Item peek = data.first();
         if(peek!=null)
             return peek.pair.getLinkageDistance();
         else
