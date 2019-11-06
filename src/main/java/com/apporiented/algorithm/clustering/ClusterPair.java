@@ -20,7 +20,7 @@ import java.util.function.Function;
 
 public class ClusterPair<T> implements Comparable<ClusterPair<T>> {
 
-    private static long globalIndex = 0;
+    private long globalIndex = 0;
 
     private Cluster<T> lCluster;
     private Cluster<T> rCluster;
