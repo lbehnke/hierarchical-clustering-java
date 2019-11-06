@@ -16,9 +16,8 @@
 
 package com.apporiented.algorithm.clustering;
 
+
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -27,16 +26,26 @@ import java.util.stream.Stream;
 public class DefaultClusteringAlgorithm<T> implements ClusteringAlgorithm<T>
 {
 
+    private final Function<T, String> toIdFunction;
     private Function<T, String> toStringFunction;
 
     public DefaultClusteringAlgorithm(Function<T, String> toStringFunction) {
+        this(toStringFunction,null);
+    }
 
+    public DefaultClusteringAlgorithm(Function<T, String> toStringFunction, /*@Nullable*/ Function<T, String> toIdFunction) {
+        this.toIdFunction = toIdFunction ==null? t -> String.valueOf(t.hashCode()) : toIdFunction;
         this.toStringFunction = toStringFunction;
     }
 
     @Override
     public Function<T, String> getToStringFunction() {
         return toStringFunction;
+    }
+
+    @Override
+    public Function<T, String> getToIdFunction() {
+        return toIdFunction;
     }
 
     @Override
@@ -148,7 +157,7 @@ public class DefaultClusteringAlgorithm<T> implements ClusteringAlgorithm<T>
         List<Cluster<T>> clusters = new ArrayList<>();
         for (T clusterName : clusterNames)
         {
-            LeafCluster<T> cluster = new LeafCluster<T>(clusterName, toStringFunction);
+            LeafCluster<T> cluster = new LeafCluster<T>(clusterName, toStringFunction,getToIdFunction());
             clusters.add(cluster);
         }
         return clusters;
@@ -159,7 +168,7 @@ public class DefaultClusteringAlgorithm<T> implements ClusteringAlgorithm<T>
         List<Cluster<T>> clusters = new ArrayList<>();
         for (int i = 0; i < weights.length; i++)
         {
-            LeafCluster<T> cluster = new LeafCluster<T>(clusterNames[i], toStringFunction);
+            LeafCluster<T> cluster = new LeafCluster<T>(clusterNames[i], toStringFunction,getToIdFunction());
             cluster.setDistance(new Distance(0.0, weights[i]));
             clusters.add(cluster);
         }

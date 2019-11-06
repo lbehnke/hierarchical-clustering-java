@@ -115,7 +115,7 @@ public class PDistClusteringAlgorithm<T> implements ClusteringAlgorithm<T> {
     private List<LeafCluster<T>> createClusters(T[] clusterNames) {
         List<LeafCluster<T>> clusters = new ArrayList<LeafCluster<T>>();
         for (T clusterName : clusterNames) {
-            LeafCluster<T> cluster = new LeafCluster<T>(clusterName, getToStringFunction());
+            LeafCluster<T> cluster = new LeafCluster<T>(clusterName, getToStringFunction(),getToIdFunction());
             cluster.addLeafName(clusterName);
             clusters.add(cluster);
         }

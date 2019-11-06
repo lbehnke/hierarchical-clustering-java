@@ -62,4 +62,9 @@ public interface Cluster<T> extends Iterable<Cluster<T>>{
     Stream<Cluster<T>> streamChildren();
 
     Stream<Cluster<T>> streamChildren(double untilNodeDistanceLessThan);
+
+    String getId();
+
+
+
 }

@@ -23,15 +23,21 @@ public class LeafCluster<T> extends AbstractCluster<T> {
 
     private T name;
     private Function<T, String> toStringFunction;
-
+    private Function<T, String> toIdFunction;
 
     public LeafCluster(T name, Function<T, String> toStringFunction) {
+        this(name,toStringFunction,t->String.valueOf(t.hashCode()));
+    }
+
+    public LeafCluster(T name, Function<T, String> toStringFunction, Function<T, String> toIdFunction) {
         super(false);
         this.name = name;
         this.toStringFunction = toStringFunction;
+        this.toIdFunction = toIdFunction;
     }
 
-//    @Override
+
+    //    @Override
     public T getName()
     {
         return name;
@@ -47,7 +53,7 @@ public class LeafCluster<T> extends AbstractCluster<T> {
     }
 
     @Override
-    public Object getPayload() {
+    public T getPayload() {
         return name;
     }
 
@@ -71,6 +77,11 @@ public class LeafCluster<T> extends AbstractCluster<T> {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String getId(){
+        return toIdFunction.apply(name);
     }
 
     @Override

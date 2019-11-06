@@ -120,14 +120,14 @@ public class DistanceMap<T> {
 
 
     String hashCodePair(Cluster<T> lCluster, Cluster<T> rCluster) {
-        return hashCodePairNames(lCluster.getPayload(), rCluster.getPayload());
+        return hashCodePairNames(lCluster.getId(), rCluster.getId());
     }
 
-    String hashCodePairNames(Object lName, Object rName) {
-        if (Integer.compare(lName.hashCode(),rName.hashCode()) < 0) {
-            return lName.hashCode() + "~~~" + rName.hashCode();//getlCluster().hashCode() + 31 * (getrCluster().hashCode());
+    String hashCodePairNames(String lName, String rName) {
+        if (lName.compareTo(rName) < 0) {
+            return lName + "~~~" + rName;//getlCluster().hashCode() + 31 * (getrCluster().hashCode());
         } else {
-            return rName.hashCode() + "~~~" + lName.hashCode();//return getrCluster().hashCode() + 31 * (getlCluster().hashCode());
+            return rName + "~~~" + lName;//return getrCluster().hashCode() + 31 * (getlCluster().hashCode());
         }
     }
 

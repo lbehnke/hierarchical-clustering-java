@@ -18,4 +18,9 @@ public class NodeCluster<T> extends AbstractCluster<T>  implements Cluster<T> {
     public Object getPayload() {
         return name;
     }
+
+    @Override
+    public String getId() {
+        return String.valueOf(System.identityHashCode(this));
+    }
 }

@@ -22,7 +22,12 @@ import java.util.function.Function;
 public interface ClusteringAlgorithm<T>
 {
 
+
     Function<T, String> getToStringFunction();
+
+    default Function<T, String> getToIdFunction(){
+        return t -> String.valueOf(t.hashCode());
+    }
 
     public Cluster<T> performClustering(double[][] distances, T[] clusterNames,
                                         LinkageStrategy linkageStrategy);
