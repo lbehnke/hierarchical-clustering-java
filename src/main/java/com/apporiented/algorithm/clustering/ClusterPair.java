@@ -16,11 +16,12 @@
 
 package com.apporiented.algorithm.clustering;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
 public class ClusterPair<T> implements Comparable<ClusterPair<T>> {
 
-    private long globalIndex = 0;
+    static private AtomicInteger globalIndex = new AtomicInteger(0);
 
     private Cluster<T> lCluster;
     private Cluster<T> rCluster;
@@ -92,7 +93,7 @@ public class ClusterPair<T> implements Comparable<ClusterPair<T>> {
 
 
     public Cluster<T> agglomerate(T name) {
-        NodeCluster<T> cluster = new NodeCluster<>("clstr#" + (++globalIndex));
+        NodeCluster<T> cluster = new NodeCluster<>("clstr#" + globalIndex.incrementAndGet());
 //            ;
 //        if (name == null) {
 //            cluster = new NodeCluster("clstr#" + (++globalIndex));
