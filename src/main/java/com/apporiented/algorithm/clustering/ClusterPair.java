@@ -17,11 +17,12 @@
 package com.apporiented.algorithm.clustering;
 
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 
 public class ClusterPair<T> implements Comparable<ClusterPair<T>> {
 
-    static private AtomicInteger globalIndex = new AtomicInteger(0);
+    static private AtomicLong globalIndex = new AtomicLong(0);
 
     private Cluster<T> lCluster;
     private Cluster<T> rCluster;
