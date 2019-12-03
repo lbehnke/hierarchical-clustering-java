@@ -5,6 +5,10 @@ Implementation of an agglomerative hierarchical clustering algorithm in Java. Di
 * Single Linkage
 * Complete Linkage
 
+
+https://en.wikipedia.org/wiki/Hierarchical_clustering
+https://en.wikipedia.org/wiki/WPGMA
+
 What you put in
 ---------------
 

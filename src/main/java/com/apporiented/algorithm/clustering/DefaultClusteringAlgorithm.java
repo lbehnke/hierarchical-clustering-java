@@ -54,8 +54,9 @@ public class DefaultClusteringAlgorithm<T> implements ClusteringAlgorithm<T>
     {
 
         checkArguments(distances, clusterNames, linkageStrategy);
-    /* Setup model */
+        // create all leaves
         List<Cluster<T>> clusters = createClusters(clusterNames);
+        //create link between all clusters
         DistanceMap linkages = createLinkages(distances, clusters);
 
     /* Process */
