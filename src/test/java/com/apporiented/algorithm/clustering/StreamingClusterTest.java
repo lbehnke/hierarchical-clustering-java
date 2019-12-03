@@ -19,11 +19,13 @@ package com.apporiented.algorithm.clustering;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 
-public class ClusterTest {
+public class StreamingClusterTest {
 
     private Cluster<String> cluster;
     
@@ -40,14 +42,21 @@ public class ClusterTest {
     }
     
     @Test
-    public void testCountLeafs() throws Exception {
-        int leafs = cluster.countLeafs();
-        assertEquals(6, leafs);
+    public void testStreamLeaf() throws Exception {
+        List<Cluster<String>> leafs = cluster.streamChildren().filter(cluster->cluster.isLeaf()).collect(Collectors.toList());
+        assertEquals(6, leafs.size());
     }
-    
+
     @Test
-    public void testGetTotalDistance() throws Exception {
-        int dist = (int) cluster.getTotalDistance();
-        assertEquals(10, dist);
+    public void testStreamNode() throws Exception {
+        List<Cluster<String>> nodes = cluster.streamChildren().filter(cluster->cluster.isNode()).collect(Collectors.toList());
+        assertEquals(4, nodes.size());
     }
+    @Test
+    public void testStream() throws Exception {
+        List<Cluster<String>> nodes = cluster.streamChildren().collect(Collectors.toList());
+        assertEquals(10, nodes.size());
+    }
+
+
 }

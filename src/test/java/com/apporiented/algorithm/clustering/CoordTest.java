@@ -9,13 +9,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * @author Lars Behnke <lars.behnke@bruker.com>
  */
 public class CoordTest {
 
-    private static Cluster importCluster() throws IOException {
+    private static Cluster<String> importCluster() throws IOException {
         List<Coord> coords = readCoordinates();
 
         double[][] distances = new double[coords.size()][coords.size()];
@@ -30,9 +31,9 @@ public class CoordTest {
             }
             names[row] = ""+row;
         }
-        ClusteringAlgorithm alg = new DefaultClusteringAlgorithm();
-        Cluster cluster = alg.performClustering(distances, names,
-                new AverageLinkageStrategy());
+        ClusteringAlgorithm<String> alg = new DefaultClusteringAlgorithm<>((Function<String, String>) s -> s);
+        Cluster<String> cluster = alg.performClustering(distances, names,
+                                                        new AverageLinkageStrategy());
         return cluster;
     }
 
@@ -56,7 +57,7 @@ public class CoordTest {
         dp.setScaleValueInterval(1);
         dp.setShowDistances(false);
 
-        Cluster cluster = importCluster();
+        Cluster<String> cluster = importCluster();
         dp.setModel(cluster);
         frame.setVisible(true);
     }

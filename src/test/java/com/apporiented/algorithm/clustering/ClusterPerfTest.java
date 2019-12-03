@@ -19,14 +19,15 @@ package com.apporiented.algorithm.clustering;
 import org.junit.Test;
 
 import java.util.Random;
+import java.util.function.Function;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 public class ClusterPerfTest {
 
-    Cluster randomCluster(int n) {
-        ClusteringAlgorithm alg = new DefaultClusteringAlgorithm();
+    Cluster<String> randomCluster(int n) {
+        ClusteringAlgorithm<String> alg = new DefaultClusteringAlgorithm<String>((Function<String, String>) s -> s);
 
         return alg.performClustering(randomDataDist(n), randomDataNames(n),
                 new AverageLinkageStrategy());
@@ -71,7 +72,7 @@ public class ClusterPerfTest {
 
     private Long timeN(int n) {
         Long t0 = System.currentTimeMillis();
-        Cluster cluster = randomCluster(n);
+        Cluster<String> cluster = randomCluster(n);
         return System.currentTimeMillis() - t0;
     }
 

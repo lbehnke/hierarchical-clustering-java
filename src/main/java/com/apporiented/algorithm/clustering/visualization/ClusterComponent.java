@@ -22,12 +22,13 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.apporiented.algorithm.clustering.LeafCluster;
 import com.apporiented.algorithm.clustering.Cluster;
 
 
-public class ClusterComponent implements Paintable {
+public class ClusterComponent<T> implements Paintable {
 
-	private Cluster cluster;
+	private Cluster<T> cluster;
 	private VCoord linkPoint;
 	private VCoord initPoint;
     private boolean printName;
@@ -79,11 +80,11 @@ public class ClusterComponent implements Paintable {
         this.initPoint = initPoint;
     }
     
-	public Cluster getCluster() {
+	public Cluster<T> getCluster() {
 		return cluster;
 	}
 
-	public void setCluster(Cluster cluster) {
+	public void setCluster(LeafCluster<T> cluster) {
 		this.cluster = cluster;
 	}
 
@@ -95,7 +96,7 @@ public class ClusterComponent implements Paintable {
 		this.printName = printName;
 	}
 
-	public ClusterComponent (Cluster cluster, boolean printName, VCoord initPoint) {
+	public ClusterComponent (Cluster<T> cluster, boolean printName, VCoord initPoint) {
 		this.printName = printName;
 		this.cluster = cluster;
 		this.initPoint = initPoint;
@@ -114,7 +115,7 @@ public class ClusterComponent implements Paintable {
         g.drawLine(x1, y1, x2, y2);
 
         if (cluster.isLeaf()) {
-            g.drawString(cluster.getName(), x1 + namePadding, y1 + (fontMetrics.getHeight()/2) - 2);
+            g.drawString(cluster.getClusterAsString(), x1 + namePadding, y1 + (fontMetrics.getHeight()/2) - 2);
         }
         if (decorated && cluster.getDistance() != null && !cluster.getDistance().isNaN() && cluster.getDistance().getDistance() > 0) {
             String s = String.format("%.2f", cluster.getDistance());
@@ -180,7 +181,7 @@ public class ClusterComponent implements Paintable {
     public int getNameWidth(Graphics2D g, boolean includeNonLeafs) {
         int width = 0;
         if (includeNonLeafs || cluster.isLeaf()) {
-            Rectangle2D rect =  g.getFontMetrics().getStringBounds(cluster.getName(), g);
+            Rectangle2D rect =  g.getFontMetrics().getStringBounds(cluster.getClusterAsString(), g);
             width = (int)rect.getWidth();
         }
         return width;

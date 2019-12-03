@@ -18,12 +18,25 @@ package com.apporiented.algorithm.clustering;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
-public class PDistClusteringAlgorithm implements ClusteringAlgorithm {
+public class PDistClusteringAlgorithm<T> implements ClusteringAlgorithm<T> {
+
+    private Function<T, String> toStringFunction;
+
+    public PDistClusteringAlgorithm(Function<T, String> toStringFunction) {
+
+        this.toStringFunction = toStringFunction;
+    }
 
     @Override
-    public Cluster performClustering(double[][] distances,
-                                     String[] clusterNames, LinkageStrategy linkageStrategy) {
+    public Function<T, String> getToStringFunction() {
+        return toStringFunction;
+    }
+
+    @Override
+    public Cluster<T> performClustering(double[][] distances,
+                                        T[] clusterNames, LinkageStrategy linkageStrategy) {
 
 		/* Argument checks */
         if (distances == null || distances.length == 0) {
@@ -38,7 +51,7 @@ public class PDistClusteringAlgorithm implements ClusteringAlgorithm {
         }
 
 		/* Setup model */
-        List<Cluster> clusters = createClusters(clusterNames);
+        List<LeafCluster<T>> clusters = createClusters(clusterNames);
         DistanceMap linkages = createLinkages(distances, clusters);
 
 		/* Process */
@@ -51,8 +64,8 @@ public class PDistClusteringAlgorithm implements ClusteringAlgorithm {
     }
 
     @Override
-    public List<Cluster> performFlatClustering(double[][] distances,
-                                     String[] clusterNames, LinkageStrategy linkageStrategy, Double threshold) {
+    public List<LeafCluster<T>> performFlatClustering(double[][] distances,
+                                                      T[] clusterNames, LinkageStrategy linkageStrategy, Double threshold) {
 
 		/* Argument checks */
         if (distances == null || distances.length == 0) {
@@ -67,7 +80,7 @@ public class PDistClusteringAlgorithm implements ClusteringAlgorithm {
         }
 
 		/* Setup model */
-        List<Cluster> clusters = createClusters(clusterNames);
+        List<LeafCluster<T>> clusters = createClusters(clusterNames);
         DistanceMap linkages = createLinkages(distances, clusters);
 
 		/* Process */
@@ -76,18 +89,18 @@ public class PDistClusteringAlgorithm implements ClusteringAlgorithm {
     }
 
     @Override
-    public Cluster performWeightedClustering(double[][] distances, String[] clusterNames,
-                                             double[] weights, LinkageStrategy linkageStrategy) {
+    public Cluster<T> performWeightedClustering(double[][] distances, T[] clusterNames,
+                                                double[] weights, LinkageStrategy linkageStrategy) {
         return performClustering(distances, clusterNames, linkageStrategy);
     }
 
     private DistanceMap createLinkages(double[][] distances,
-                                       List<Cluster> clusters) {
+                                       List<LeafCluster<T>> clusters) {
         DistanceMap linkages = new DistanceMap();
         for (int col = 0; col < clusters.size(); col++) {
-            Cluster cluster_col = clusters.get(col);
+            LeafCluster cluster_col = clusters.get(col);
             for (int row = col + 1; row < clusters.size(); row++) {
-                ClusterPair link = new ClusterPair();
+                ClusterPair<T> link = new ClusterPair<T>();
                 Double d = distances[0][accessFunction(row, col,
                         clusters.size())];
 				link.setLinkageDistance(d);
@@ -99,10 +112,10 @@ public class PDistClusteringAlgorithm implements ClusteringAlgorithm {
         return linkages;
     }
 
-    private List<Cluster> createClusters(String[] clusterNames) {
-        List<Cluster> clusters = new ArrayList<Cluster>();
-        for (String clusterName : clusterNames) {
-            Cluster cluster = new Cluster(clusterName);
+    private List<LeafCluster<T>> createClusters(T[] clusterNames) {
+        List<LeafCluster<T>> clusters = new ArrayList<LeafCluster<T>>();
+        for (T clusterName : clusterNames) {
+            LeafCluster<T> cluster = new LeafCluster<T>(clusterName, getToStringFunction(),getToIdFunction());
             cluster.addLeafName(clusterName);
             clusters.add(cluster);
         }

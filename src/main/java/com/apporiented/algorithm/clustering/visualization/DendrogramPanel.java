@@ -23,21 +23,22 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Rectangle2D;
+import java.util.function.Function;
 
 import javax.swing.*;
 
 import com.apporiented.algorithm.clustering.AverageLinkageStrategy;
-import com.apporiented.algorithm.clustering.Cluster;
 import com.apporiented.algorithm.clustering.ClusteringAlgorithm;
 import com.apporiented.algorithm.clustering.DefaultClusteringAlgorithm;
+import com.apporiented.algorithm.clustering.Cluster;
 
-public class DendrogramPanel extends JPanel {
+public class DendrogramPanel<T>  extends JPanel {
 
     private static final long serialVersionUID = 1L;
 
     final static BasicStroke solidStroke = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
 
-    private Cluster model;
+    private Cluster<T> model;
     private ClusterComponent component;
     private Color lineColor = Color.BLACK;
     private boolean showDistanceValues = false;
@@ -145,11 +146,11 @@ public class DendrogramPanel extends JPanel {
         this.lineColor = lineColor;
     }
 
-    public Cluster getModel() {
+    public Cluster<T> getModel() {
         return model;
     }
 
-    public void setModel(Cluster model) {
+    public void setModel(Cluster<T> model) {
         this.model = model;
         component = createComponent(model);
         updateModelMetrics();
@@ -167,7 +168,7 @@ public class DendrogramPanel extends JPanel {
         hModel = maxY - minY;
     }
 
-    private ClusterComponent createComponent(Cluster cluster, VCoord initCoord, double clusterHeight) {
+    private ClusterComponent createComponent(Cluster<T> cluster, VCoord initCoord, double clusterHeight) {
 
         ClusterComponent comp = null;
         if (cluster != null) {
@@ -175,7 +176,7 @@ public class DendrogramPanel extends JPanel {
             double leafHeight = clusterHeight / cluster.countLeafs();
             double yChild = initCoord.getY() - (clusterHeight / 2);
             double distance = cluster.getDistanceValue() == null ? 0 : cluster.getDistanceValue();
-            for (Cluster child : cluster.getChildren()) {
+            for (Cluster<T> child : cluster.getChildren()) {
                 int childLeafCount = child.countLeafs();
                 double childHeight = childLeafCount * leafHeight;
                 double childDistance = child.getDistanceValue() == null ? 0 : child.getDistanceValue();
@@ -194,7 +195,7 @@ public class DendrogramPanel extends JPanel {
 
     }
 
-    private ClusterComponent createComponent(Cluster model) {
+    private ClusterComponent createComponent(Cluster<T> model) {
 
         double virtualModelHeight = 1;
         VCoord initCoord = new VCoord(0, virtualModelHeight / 2);
@@ -297,17 +298,17 @@ public class DendrogramPanel extends JPanel {
         dp.setScaleValueInterval(1);
         dp.setShowDistances(false);
 
-        Cluster cluster = createSampleCluster();
+        Cluster<String> cluster = createSampleCluster((Function<String, String>) s -> s);
         dp.setModel(cluster);
         frame.setVisible(true);
     }
 
-    private static Cluster createSampleCluster() {
+    private  static <T> Cluster<T> createSampleCluster(Function<T, String> toStringFunction) {
         double[][] distances = new double[][] { { 0, 1, 9, 7, 11, 14 }, { 1, 0, 4, 3, 8, 10 }, { 9, 4, 0, 9, 2, 8 },
                 { 7, 3, 9, 0, 6, 13 }, { 11, 8, 2, 6, 0, 10 }, { 14, 10, 8, 13, 10, 0 } };
         String[] names = new String[] { "O1", "O2", "O3", "O4", "O5", "O6" };
-        ClusteringAlgorithm alg = new DefaultClusteringAlgorithm();
-        Cluster cluster = alg.performClustering(distances, names, new AverageLinkageStrategy());
+        ClusteringAlgorithm alg = new DefaultClusteringAlgorithm<T> (toStringFunction);
+        Cluster<T> cluster = alg.performClustering(distances, names, new AverageLinkageStrategy());
         cluster.toConsole(0);
         return cluster;
     }

@@ -7,24 +7,38 @@ import java.util.*;
  * with the minimal methods needed in the package
  * Created by Alexandre Masselot on 7/18/14.
  */
-public class DistanceMap {
+public class DistanceMap<T> {
+
 
     private Map<String, Item> pairHash;
-    private PriorityQueue<Item> data;
+    private TreeSet<Item> data;
+
+
+    //start here as low as possible
+    private static long nextUniqueNum =Long.MIN_VALUE;
 
     private class Item implements Comparable<Item> {
-        final ClusterPair pair;
+
+        //uniquenumber, see in compareTo
+        private final long uniqueNum = nextUniqueNum++;
+
+        final ClusterPair<T> pair;
         final String hash;
         boolean removed = false;
 
-        Item(ClusterPair p) {
+        Item(ClusterPair<T> p) {
             pair = p;
             hash = hashCodePair(p);
         }
 
         @Override
         public int compareTo(Item o) {
-            return pair.compareTo(o.pair);
+            final int compareToPair = pair.compareTo(o.pair);
+            if (compareToPair==0){
+                //treeset has to have an unique item
+                return Long.compare(uniqueNum, o.uniqueNum);
+            }
+            return compareToPair;
         }
 
         @Override
@@ -33,39 +47,46 @@ public class DistanceMap {
         }
     }
 
+
     public DistanceMap() {
-        data = new PriorityQueue<Item>();
-        pairHash = new HashMap<String, Item>();
+        data = new TreeSet<>();
+        pairHash = new HashMap<>();
     }
 
-    public List<ClusterPair> list() {
-        List<ClusterPair> l = new ArrayList<ClusterPair>();
+    public List<ClusterPair<T>> list() {
+        List<ClusterPair<T>> l = new ArrayList<ClusterPair<T>>();
         for (Item clusterPair : data) {
             l.add(clusterPair.pair);
         }
         return l;
     }
 
-    public ClusterPair findByCodePair(Cluster c1, Cluster c2) {
+    public ClusterPair<T> findByCodePair(Cluster<T> c1, Cluster<T> c2) {
         String inCode = hashCodePair(c1, c2);
-        return pairHash.get(inCode).pair;
+        try {
+            return pairHash.get(inCode).pair;
+        } catch (Exception e) {
+            throw new RuntimeException("not found hash "+c1.getClusterAsString()+" "+c2.getClusterAsString()+" hash: "+ inCode);
+        }
     }
 
-    public ClusterPair removeFirst() {
-        Item poll = data.poll();
+    public ClusterPair<T> removeFirst() {
+        Item poll = data.pollFirst();
         while (poll != null && poll.removed) {
-            poll = data.poll();
+            poll = data.pollFirst();
         }
         if (poll == null) {
             return null;
         }
-        ClusterPair link = poll.pair;
+        ClusterPair<T> link = poll.pair;
         pairHash.remove(poll.hash);
         return link;
     }
 
-    public boolean remove(ClusterPair link) {
-        Item remove = pairHash.remove(hashCodePair(link));
+    public boolean remove(ClusterPair<T> link) {
+        final String hashCode = hashCodePair(link);
+//        System.err.println("removing hash "+hashCode);
+        Item remove = pairHash.remove(hashCode);
         if (remove == null) {
             return false;
         }
@@ -75,7 +96,7 @@ public class DistanceMap {
     }
 
 
-    public boolean add(ClusterPair link) {
+    public boolean add(ClusterPair<T> link) {
         Item e = new Item(link);
         Item existingItem = pairHash.get(e.hash);
         if (existingItem != null) {
@@ -94,7 +115,7 @@ public class DistanceMap {
      */
     public Double minDist()
     {
-        Item peek = data.peek();
+        Item peek = data.first();
         if(peek!=null)
             return peek.pair.getLinkageDistance();
         else
@@ -105,12 +126,14 @@ public class DistanceMap {
      * Compute some kind of unique ID for a given cluster pair.
      * @return The ID
      */
-    String hashCodePair(ClusterPair link) {
+    String hashCodePair(ClusterPair<T> link) {
         return hashCodePair(link.getlCluster(), link.getrCluster());
     }
 
-    String hashCodePair(Cluster lCluster, Cluster rCluster) {
-        return hashCodePairNames(lCluster.getName(), rCluster.getName());
+
+
+    String hashCodePair(Cluster<T> lCluster, Cluster<T> rCluster) {
+        return hashCodePairNames(lCluster.getId(), rCluster.getId());
     }
 
     String hashCodePairNames(String lName, String rName) {

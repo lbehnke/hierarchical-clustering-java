@@ -1,244 +1,70 @@
-/*******************************************************************************
- * Copyright 2013 Lars Behnke
- * <p/>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p/>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p/>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
-
 package com.apporiented.algorithm.clustering;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
-public class Cluster
-{
+public interface Cluster<T> extends Iterable<Cluster<T>>{
+    //todo: create interface Cluster
+    int countLeafs(Cluster<T> node, int count);
 
-    private String name;
+    void toConsole(int indent);
 
-    private Cluster parent;
+    String getClusterAsString();
 
-    private List<Cluster> children;
+    String toString(int indent);
 
-    private List<String> leafNames;
+    String toNewickString(int indent);
 
-    private Distance distance = new Distance();
+    double getTotalDistance();
 
+    boolean isNode();
 
-    public Cluster(String name)
-    {
-        this.name = name;
-        leafNames = new ArrayList<String>();
-    }
+    Distance getDistance();
 
-    public Distance getDistance()
-    {
-        return distance;
-    }
+    Double getWeightValue();
 
-    public Double getWeightValue()
-    {
-        return distance.getWeight();
-    }
+    Double getDistanceValue();
 
-    public Double getDistanceValue()
-    {
-        return distance.getDistance();
-    }
+    void setDistance(Distance distance);
 
-    public void setDistance(Distance distance)
-    {
-        this.distance = distance;
-    }
+    List<Cluster<T>> getChildren();
 
-    public List<Cluster> getChildren()
-    {
-        if (children == null)
-        {
-            children = new ArrayList<Cluster>();
-        }
+    void addLeafName(T lname);
 
-        return children;
-    }
+    void appendLeafNames(List<T> lnames);
 
-    public void addLeafName(String lname)
-    {
-        leafNames.add(lname);
-    }
+    List<T> getLeafNames();
 
-    public void appendLeafNames(List<String> lnames)
-    {
-        leafNames.addAll(lnames);
-    }
+    void setChildren(List<Cluster<T>> children);
 
-    public List<String> getLeafNames()
-    {
-        return leafNames;
-    }
+    NodeCluster getParent();
 
-    public void setChildren(List<Cluster> children)
-    {
-        this.children = children;
-    }
+    void setParent(NodeCluster parent);
 
-    public Cluster getParent()
-    {
-        return parent;
-    }
+//    T getName();
+//
+//    void setName(T name);
 
-    public void setParent(Cluster parent)
-    {
-        this.parent = parent;
-    }
+    void addChild(Cluster<T> cluster);
+
+    boolean contains(Cluster<T> cluster);
+
+    boolean isLeaf();
+
+    int countLeafs();
+
+    Object getPayload();
+
+    Stream<Cluster<T>> stream();
+
+    Stream<Cluster<T>> stream(double untilNodeDistanceLessThan);
+
+    Stream<Cluster<T>> streamChildren();
+
+    Stream<Cluster<T>> streamChildren(double untilNodeDistanceLessThan);
+
+    String getId();
 
 
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-    public void addChild(Cluster cluster)
-    {
-        getChildren().add(cluster);
-
-    }
-
-    public boolean contains(Cluster cluster)
-    {
-        return getChildren().contains(cluster);
-    }
-
-    @Override
-    public String toString()
-    {
-        return "Cluster " + name;
-    }
-
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (this == obj)
-        {
-            return true;
-        }
-        if (obj == null)
-        {
-            return false;
-        }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        Cluster other = (Cluster) obj;
-        if (name == null)
-        {
-            if (other.name != null)
-            {
-                return false;
-            }
-        } else if (!name.equals(other.name))
-        {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return (name == null) ? 0 : name.hashCode();
-    }
-
-    public boolean isLeaf()
-    {
-        return getChildren().size() == 0;
-    }
-
-    public int countLeafs()
-    {
-        return countLeafs(this, 0);
-    }
-
-    public int countLeafs(Cluster node, int count)
-    {
-        if (node.isLeaf()) count++;
-        for (Cluster child : node.getChildren())
-        {
-            count += child.countLeafs();
-        }
-        return count;
-    }
-
-    public void toConsole(int indent)
-    {
-        for (int i = 0; i < indent; i++)
-        {
-            System.out.print("  ");
-
-        }
-        String name = getName() + (isLeaf() ? " (leaf)" : "") + (distance != null ? "  distance: " + distance : "");
-        System.out.println(name);
-        for (Cluster child : getChildren())
-        {
-            child.toConsole(indent + 1);
-        }
-    }
-    
-    public String toNewickString(int indent)
-    {
-    	String cdtString = "";
-        if(!isLeaf()) cdtString+="(";
-    	
-    	for (int i = 0; i < indent; i++) cdtString+=" ";
-        
-        
-        if(isLeaf()) {
-        	cdtString+=getName();
-        }
-        
-        List<Cluster> children = getChildren();
-        
-        boolean firstChild = true;
-        for (Cluster child : children)
-        {
-        	cdtString+=child.toNewickString(indent);
-        	String distanceString = distance.getDistance().toString().replace(",", ".");
-        	String weightString = distance.getWeight().toString().replace(",", ".");
-            if(firstChild) cdtString+=":"+distanceString+",";
-            else cdtString+=":"+weightString;
-            
-            firstChild=false;
-        }
-        
-        for (int i = 0; i < indent; i++) cdtString+=" ";
-        
-        if(!isLeaf()) cdtString+=")";
-        
-        return cdtString;
-    }
-
-    public double getTotalDistance()
-    {
-        Double dist = getDistance() == null ? 0 : getDistance().getDistance();
-        if (getChildren().size() > 0)
-        {
-            dist += children.get(0).getTotalDistance();
-        }
-        return dist;
-
-    }
 
 }

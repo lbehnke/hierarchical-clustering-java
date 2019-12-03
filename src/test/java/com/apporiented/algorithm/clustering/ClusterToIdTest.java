@@ -19,22 +19,26 @@ package com.apporiented.algorithm.clustering;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 import static org.junit.Assert.assertEquals;
 
-public class ClusterTest {
+public class ClusterToIdTest {
 
     private Cluster<String> cluster;
     
     @Before
     public void setup() {
-        ClusteringAlgorithm<String> alg = new DefaultClusteringAlgorithm<String>(new Function<String, String>() {
-            @Override
-            public String apply(String s) {
-                return s;
-            }
-        });
+        Map<String,String> nameToIdMap=new HashMap<>();
+        for (int i=0; i< SampleClusterData.NAMES.length;i++) {
+            nameToIdMap.put(SampleClusterData.NAMES[i],String.valueOf(i));
+        }
+
+
+        ClusteringAlgorithm<String> alg = new DefaultClusteringAlgorithm<String>(s -> s,t->nameToIdMap.get(t));
         cluster = alg.performClustering(SampleClusterData.DISTANCES, SampleClusterData.NAMES,
                 new AverageLinkageStrategy());
     }
