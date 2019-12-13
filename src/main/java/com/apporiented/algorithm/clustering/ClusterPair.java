@@ -18,8 +18,6 @@ package com.apporiented.algorithm.clustering;
 
 public class ClusterPair implements Comparable<ClusterPair> {
 
-    private static long globalIndex = 0;
-
     private Cluster lCluster;
     private Cluster rCluster;
     private Double linkageDistance;
@@ -84,25 +82,11 @@ public class ClusterPair implements Comparable<ClusterPair> {
         return result;
     }
 
+    public Cluster agglomerate(int clusterIdx) {
+        return agglomerate("clstr#" + clusterIdx);
+    }
 
     public Cluster agglomerate(String name) {
-        if (name == null) {
-            name = "clstr#" + (++globalIndex);
-
-            /*
-            StringBuilder sb = new StringBuilder();
-            if (lCluster != null) {
-                sb.append(lCluster.getName());
-            }
-            if (rCluster != null) {
-                if (sb.length() > 0) {
-                    sb.append("&");
-                }
-                sb.append(rCluster.getName());
-            }
-            name = sb.toString();
-            */
-        }
         Cluster cluster = new Cluster(name);
         cluster.setDistance(new Distance(getLinkageDistance()));
         //New clusters will track their children's leaf names; i.e. each cluster knows what part of the original data it contains

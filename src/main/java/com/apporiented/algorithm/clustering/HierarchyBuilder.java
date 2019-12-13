@@ -24,6 +24,7 @@ public class HierarchyBuilder {
 
     private DistanceMap distances;
     private List<Cluster> clusters;
+    private int globalClusterIndex = 0;
 
     public DistanceMap getDistances() {
         return distances;
@@ -66,7 +67,7 @@ public class HierarchyBuilder {
 
             Cluster oldClusterL = minDistLink.getlCluster();
             Cluster oldClusterR = minDistLink.getrCluster();
-            Cluster newCluster = minDistLink.agglomerate(null);
+            Cluster newCluster = minDistLink.agglomerate(++globalClusterIndex);
 
             for (Cluster iClust : clusters) {
                 ClusterPair link1 = findByClusters(iClust, oldClusterL);
@@ -93,7 +94,6 @@ public class HierarchyBuilder {
 
                 newLinkage.setLinkageDistance(newDistance.getDistance());
                 distances.add(newLinkage);
-
             }
             clusters.add(newCluster);
         }
