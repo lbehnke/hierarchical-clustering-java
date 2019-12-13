@@ -24,6 +24,7 @@ public class HierarchyBuilder {
 
     private DistanceMap distances;
     private List<Cluster> clusters;
+    private int globalClusterIndex = 0;
 
     public DistanceMap getDistances() {
         return distances;
@@ -66,7 +67,7 @@ public class HierarchyBuilder {
 
             Cluster oldClusterL = minDistLink.getlCluster();
             Cluster oldClusterR = minDistLink.getrCluster();
-            Cluster newCluster = minDistLink.agglomerate(null);
+            Cluster newCluster = minDistLink.agglomerate(++globalClusterIndex);
 
             for (Cluster iClust : clusters) {
                 ClusterPair link1 = findByClusters(iClust, oldClusterL);
@@ -77,23 +78,22 @@ public class HierarchyBuilder {
                 Collection<Distance> distanceValues = new ArrayList<Distance>();
 
                 if (link1 != null) {
-					Double distVal = link1.getLinkageDistance();
+                    Double distVal = link1.getLinkageDistance();
                     Double weightVal = link1.getOtherCluster(iClust).getWeightValue();
                     distanceValues.add(new Distance(distVal, weightVal));
                     distances.remove(link1);
                 }
                 if (link2 != null) {
-					Double distVal = link2.getLinkageDistance();
-					Double weightVal = link2.getOtherCluster(iClust).getWeightValue();
+                    Double distVal = link2.getLinkageDistance();
+                    Double weightVal = link2.getOtherCluster(iClust).getWeightValue();
                     distanceValues.add(new Distance(distVal, weightVal));
                     distances.remove(link2);
                 }
 
                 Distance newDistance = linkageStrategy.calculateDistance(distanceValues);
 
-				newLinkage.setLinkageDistance(newDistance.getDistance());
+                newLinkage.setLinkageDistance(newDistance.getDistance());
                 distances.add(newLinkage);
-
             }
             clusters.add(newCluster);
         }

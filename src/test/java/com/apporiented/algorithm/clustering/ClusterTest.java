@@ -36,11 +36,13 @@ public class ClusterTest {
     public void testCountLeafs() throws Exception {
         int leafs = cluster.countLeafs();
         assertEquals(6, leafs);
+        assertEquals("clstr#5", cluster.getName());
     }
     
     @Test
     public void testGetTotalDistance() throws Exception {
         int dist = (int) cluster.getTotalDistance();
         assertEquals(10, dist);
+        assertEquals("clstr#5", cluster.getName());
     }
 }

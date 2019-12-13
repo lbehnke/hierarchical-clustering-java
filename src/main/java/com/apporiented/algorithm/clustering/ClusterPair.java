@@ -18,16 +18,14 @@ package com.apporiented.algorithm.clustering;
 
 public class ClusterPair implements Comparable<ClusterPair> {
 
-    private static long globalIndex = 0;
-
     private Cluster lCluster;
     private Cluster rCluster;
-	private Double linkageDistance;
+    private Double linkageDistance;
 
     public ClusterPair(){
     }
 
-	public ClusterPair(Cluster left, Cluster right, Double distance) {
+    public ClusterPair(Cluster left, Cluster right, Double distance) {
         lCluster=left;
         rCluster=right;
         linkageDistance=distance;
@@ -53,11 +51,11 @@ public class ClusterPair implements Comparable<ClusterPair> {
         this.rCluster = rCluster;
     }
 
-	public Double getLinkageDistance() {
+    public Double getLinkageDistance() {
         return linkageDistance;
     }
 
-	public void setLinkageDistance(Double distance) {
+    public void setLinkageDistance(Double distance) {
         this.linkageDistance = distance;
     }
 
@@ -84,25 +82,11 @@ public class ClusterPair implements Comparable<ClusterPair> {
         return result;
     }
 
+    public Cluster agglomerate(int clusterIdx) {
+        return agglomerate("clstr#" + clusterIdx);
+    }
 
     public Cluster agglomerate(String name) {
-        if (name == null) {
-            name = "clstr#" + (++globalIndex);
-
-            /*
-            StringBuilder sb = new StringBuilder();
-            if (lCluster != null) {
-                sb.append(lCluster.getName());
-            }
-            if (rCluster != null) {
-                if (sb.length() > 0) {
-                    sb.append("&");
-                }
-                sb.append(rCluster.getName());
-            }
-            name = sb.toString();
-            */
-        }
         Cluster cluster = new Cluster(name);
         cluster.setDistance(new Distance(getLinkageDistance()));
         //New clusters will track their children's leaf names; i.e. each cluster knows what part of the original data it contains
@@ -115,7 +99,7 @@ public class ClusterPair implements Comparable<ClusterPair> {
 
         Double lWeight = lCluster.getWeightValue();
         Double rWeight = rCluster.getWeightValue();
-		double weight = lWeight + rWeight;
+        double weight = lWeight + rWeight;
         cluster.getDistance().setWeight(weight);
 
         return cluster;
