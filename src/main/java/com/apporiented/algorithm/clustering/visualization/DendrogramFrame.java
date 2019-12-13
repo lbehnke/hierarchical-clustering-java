@@ -33,10 +33,11 @@ public class DendrogramFrame extends JFrame {
     public static void main(String[] args) {
         LinkageStrategy strategy = new CompleteLinkageStrategy();
         Frame f1 = new DendrogramFrame(createSampleCluster(strategy));
-
+        f1.setSize(500, 400);
+        f1.setLocation(100, 200);
         Frame f2 = new DendrogramFrame(createSampleCluster2(strategy));
+        f2.setSize(500, 400);
         f2.setLocation(600, 200);
-        f2.setSize(700, 800);
     }
 
     private static Cluster createSampleCluster(LinkageStrategy strategy) {
