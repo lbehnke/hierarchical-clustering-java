@@ -43,7 +43,7 @@ public class HierarchyBuilder {
      * Returns Flattened clusters, i.e. clusters that are at least apart by a given threshold
      * @param linkageStrategy
      * @param threshold
-     * @return
+     * @return flat list of clusters
      */
     public List<Cluster> flatAgg(LinkageStrategy linkageStrategy, Double threshold)
     {

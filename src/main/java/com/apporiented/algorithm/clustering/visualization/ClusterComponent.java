@@ -27,9 +27,9 @@ import com.apporiented.algorithm.clustering.Cluster;
 
 public class ClusterComponent implements Paintable {
 
-	private Cluster cluster;
-	private VCoord linkPoint;
-	private VCoord initPoint;
+    private Cluster cluster;
+    private VCoord linkPoint;
+    private VCoord initPoint;
     private boolean printName;
     private int dotRadius = 2;
     private int namePadding = 6;

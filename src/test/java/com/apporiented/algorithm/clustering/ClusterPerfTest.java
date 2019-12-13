@@ -77,7 +77,7 @@ public class ClusterPerfTest {
 
     @Test
     public void testn() throws Exception {
-        for (int n = 2; n < 513; n = n * 2) {
+        for (int n = 1; n <= 1024; n = n * 2) {
             Long t = timeN(n);
             System.out.println(String.format("%3d nodes -> %5d ms", n, t));
         }

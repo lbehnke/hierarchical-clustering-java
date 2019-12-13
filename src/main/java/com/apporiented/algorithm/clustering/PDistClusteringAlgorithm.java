@@ -25,7 +25,7 @@ public class PDistClusteringAlgorithm implements ClusteringAlgorithm {
     public Cluster performClustering(double[][] distances,
                                      String[] clusterNames, LinkageStrategy linkageStrategy) {
 
-		/* Argument checks */
+        /* Argument checks */
         if (distances == null || distances.length == 0) {
             throw new IllegalArgumentException("Invalid distance matrix");
         }
@@ -37,11 +37,11 @@ public class PDistClusteringAlgorithm implements ClusteringAlgorithm {
             throw new IllegalArgumentException("Undefined linkage strategy");
         }
 
-		/* Setup model */
+        /* Setup model */
         List<Cluster> clusters = createClusters(clusterNames);
         DistanceMap linkages = createLinkages(distances, clusters);
 
-		/* Process */
+        /* Process */
         HierarchyBuilder builder = new HierarchyBuilder(clusters, linkages);
         while (!builder.isTreeComplete()) {
             builder.agglomerate(linkageStrategy);
@@ -54,7 +54,7 @@ public class PDistClusteringAlgorithm implements ClusteringAlgorithm {
     public List<Cluster> performFlatClustering(double[][] distances,
                                      String[] clusterNames, LinkageStrategy linkageStrategy, Double threshold) {
 
-		/* Argument checks */
+        /* Argument checks */
         if (distances == null || distances.length == 0) {
             throw new IllegalArgumentException("Invalid distance matrix");
         }
@@ -66,11 +66,11 @@ public class PDistClusteringAlgorithm implements ClusteringAlgorithm {
             throw new IllegalArgumentException("Undefined linkage strategy");
         }
 
-		/* Setup model */
+        /* Setup model */
         List<Cluster> clusters = createClusters(clusterNames);
         DistanceMap linkages = createLinkages(distances, clusters);
 
-		/* Process */
+        /* Process */
         HierarchyBuilder builder = new HierarchyBuilder(clusters, linkages);
         return builder.flatAgg(linkageStrategy, threshold);
     }
@@ -90,7 +90,7 @@ public class PDistClusteringAlgorithm implements ClusteringAlgorithm {
                 ClusterPair link = new ClusterPair();
                 Double d = distances[0][accessFunction(row, col,
                         clusters.size())];
-				link.setLinkageDistance(d);
+                link.setLinkageDistance(d);
                 link.setlCluster(cluster_col);
                 link.setrCluster(clusters.get(row));
                 linkages.add(link);
