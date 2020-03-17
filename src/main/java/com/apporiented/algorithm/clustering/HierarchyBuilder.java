@@ -106,8 +106,8 @@ public class HierarchyBuilder<T> {
         }
 
 
-        System.out.println("distance len "+distances.getSizedata()+"  "+distances.getSizepairhash());
-        System.out.println("size clusters "+clusters.size());
+//        System.out.println("distance len "+distances.getSizedata()+"  "+distances.getSizepairhash());
+//        System.out.println("size clusters "+clusters.size());
 
     }
 
