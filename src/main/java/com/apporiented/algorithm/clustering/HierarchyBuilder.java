@@ -104,6 +104,11 @@ public class HierarchyBuilder<T> {
             }
             clusters.add(newCluster);
         }
+
+
+        System.out.println("distance len "+distances.getSizedata()+"  "+distances.getSizepairhash());
+        System.out.println("size clusters "+clusters.size());
+
     }
 
     private ClusterPair findByClusters(Cluster<T> c1, Cluster<T> c2) {

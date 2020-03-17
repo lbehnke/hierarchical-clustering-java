@@ -53,6 +53,13 @@ public class DistanceMap<T> {
         pairHash = new HashMap<>();
     }
 
+    public long getSizepairhash(){
+        return pairHash.size();
+    }
+    public long getSizedata(){
+        return data.size();
+    }
+
     public List<ClusterPair<T>> list() {
         List<ClusterPair<T>> l = new ArrayList<ClusterPair<T>>();
         for (Item clusterPair : data) {
