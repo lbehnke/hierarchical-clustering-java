@@ -131,6 +131,7 @@ public class DefaultClusteringAlgorithm implements ClusteringAlgorithm
         for (String clusterName : clusterNames)
         {
             Cluster cluster = new Cluster(clusterName);
+            cluster.addLeafName(clusterName);
             clusters.add(cluster);
         }
         return clusters;
